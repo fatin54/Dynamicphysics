@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { BOARD_QUESTIONS } from '@/data/boardQuestions';
 import { BoardQuestion, QuestionSourceCategory } from '@/types';
 import {
@@ -115,6 +116,22 @@ export default function QuestionsPage() {
           <Languages size={14} />
           <span>{useBangla ? 'English View' : 'বাংলায় দেখুন'}</span>
         </button>
+      </div>
+
+      {/* Chapter 2 Vector Cross-Link Banner */}
+      <div className="bg-orange-pale/60 border border-orange-light p-3.5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2">
+          <Compass size={16} className="text-orange-deep shrink-0" />
+          <span>
+            Looking for <strong>Chapter 2: Vector (ভেক্টর)</strong> 2015–2026 Board Questions (Dot/Cross, Riverboat &amp; Vector Calculus)?
+          </span>
+        </div>
+        <Link
+          href="/chapters/vector#board-questions-section"
+          className="px-3 py-1.5 rounded-xl bg-orange hover:bg-orange-deep text-white font-bold shrink-0 text-center transition-colors shadow-2xs"
+        >
+          Open Chapter 2 Question Bank &rarr;
+        </Link>
       </div>
 
       {/* Source Category Selector Tabs */}

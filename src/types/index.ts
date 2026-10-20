@@ -1,5 +1,28 @@
 export type LearningLayer = 'intuitive' | 'academic' | 'exam';
 
+export type VectorCategory = 'dot-cross' | 'riverboat' | 'vector-calculus';
+
+export type LessonCategory =
+  | 'kinematics'
+  | 'projectile'
+  | 'circular'
+  | 'calculus'
+  | 'bridge-forces'
+  | 'vector-dot-cross'
+  | 'vector-riverboat'
+  | 'vector-calculus';
+
+export type FormulaCategory =
+  | 'linear_kinematics'
+  | 'falling_bodies'
+  | 'projectile'
+  | 'circular_motion'
+  | 'forces_momentum'
+  | 'friction_pulley'
+  | 'vector_algebra'
+  | 'riverboat_relative'
+  | 'vector_calculus';
+
 export interface TerminologyItem {
   id: string;
   bangla: string;
@@ -67,7 +90,7 @@ export interface Lesson {
   sectionNumber: string;
   titleEn: string;
   titleBn: string;
-  category: 'kinematics' | 'projectile' | 'circular' | 'calculus' | 'bridge-forces';
+  category: LessonCategory;
   isOfficialChapter3: boolean;
   estimatedMinutes: number;
 
@@ -120,7 +143,7 @@ export interface FormulaItem {
   id: string;
   name: string;
   banglaName: string;
-  category: 'linear_kinematics' | 'falling_bodies' | 'projectile' | 'circular_motion' | 'forces_momentum' | 'friction_pulley';
+  category: FormulaCategory;
   latex: string;
   textbookNotation: string;
   textbookSection: string;
@@ -178,6 +201,8 @@ export interface BoardQuestion {
   board: BoardName;
   paper: 'Physics 1st Paper';
   chapter: string;
+  chapterNumber?: number;
+  vectorCategory?: VectorCategory;
   topicId: string;
   questionType: 'MCQ' | 'CQ_Ka' | 'CQ_Kha' | 'CQ_Ga' | 'CQ_Gha' | 'CQ_Full';
   marks: number;
@@ -203,7 +228,8 @@ export interface BoardQuestion {
     | 'Verified Textbook Exercise'
     | 'Admission Standard Model'
     | 'Independently Written Practice'
-    | 'Textbook Concept Reference (Prof. Md. Ishaque)';
+    | 'Textbook Concept Reference (Prof. Md. Ishaque)'
+    | 'Curriculum Practice Standard';
   sourceReference: string;
   sourceCategory?: QuestionSourceCategory;
   authorReference?: string;

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { LESSONS_DATABASE } from '@/data/lessons';
-import { BookOpen, Clock, ArrowRight, ShieldCheck, CheckCircle2, FlaskConical, Award } from 'lucide-react';
+import { BookOpen, Clock, ArrowRight, ShieldCheck, CheckCircle2, FlaskConical, Award, Compass } from 'lucide-react';
 
 export default function LessonsPage() {
   const [filterCategory, setFilterCategory] = useState<'all' | 'ch3' | 'bridge'>('all');
@@ -35,7 +35,28 @@ export default function LessonsPage() {
           </p>
         </div>
 
-        {/* Filter Pills */}
+        {/* Chapter 2 Vector Cross-Link Banner */}
+      <div className="bg-orange-pale/60 border border-orange-light p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-orange text-white flex items-center justify-center shrink-0">
+            <Compass size={16} />
+          </div>
+          <div>
+            <span className="font-bold text-orange-deep block">Looking for Chapter 2: Vector (ভেক্টর)?</span>
+            <span className="text-sand-subtext">
+              Type 1 Dot/Cross Product, Type 2 Riverboat Problems &amp; Type 3 Vector Calculus have a dedicated standalone page.
+            </span>
+          </div>
+        </div>
+        <Link
+          href="/chapters/vector"
+          className="px-3.5 py-2 rounded-xl bg-orange hover:bg-orange-deep text-white font-bold shrink-0 text-center transition-colors shadow-2xs"
+        >
+          Open Chapter 2: Vector Page &rarr;
+        </Link>
+      </div>
+
+      {/* Filter Pills */}
         <div className="flex items-center bg-sand-muted p-1 rounded-xl gap-1 text-xs font-semibold">
           <button
             onClick={() => setFilterCategory('all')}

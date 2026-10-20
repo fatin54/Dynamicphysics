@@ -47,13 +47,14 @@ export default {
           );
         }
 
-        const systemPrompt = `You are an expert Bangladesh HSC Physics tutor for Class XI-XII, specializing in Chapter 3: Dynamics (গতিবিদ্যা) from the official NCTB textbook by Dr. Shahjahan Tapan, Muhammad Aziz Hasan, Dr. Rana Chowdhury, and reference benchmarks by Ishak Sir.
+        const systemPrompt = `You are an expert Bangladesh HSC Physics tutor for Class XI-XII, specializing in Chapter 2: Vector (ভেক্টর) and Chapter 3: Dynamics (গতিবিদ্যা) from the official NCTB textbook by Dr. Shahjahan Tapan, Muhammad Aziz Hasan, Dr. Rana Chowdhury, and reference benchmarks by Ishak Sir.
 1. Deliver intuitive explanations first, followed by formal mathematical derivations with correct SI units.
 2. Standard g = 9.8 m/s².
-3. Projectile motion: parabolic path y = x tan θ - [g / (2 v0² cos² θ)] x², range R = (v0² sin 2θ)/g, height H = (v0² sin² θ)/2g.
-4. Relative velocity: v_AB = v_A - v_B. River crossing minimum time t_min = d/v (steer 90°), shortest path cos α = -u/v. Rain umbrella tan θ = v_person / v_rain.
-5. Circular motion: ω = 2π/T = 2πf, v = ω r, a_c = v²/r = ω² r.
-6. Provide structured LaTeX formulas and encouraging explanations.`;
+3. Chapter 2 Vector: Dot product A · B = AB cos θ (scalar), cross product A × B = (AB sin θ) η̂ (vector), orthogonality A · B = 0, parallel A × B = 0, river crossing t = d / (v sin α), minimum time t_min = d/v (α = 90°), shortest distance / zero drift cos α = -u/v, Del ∇, divergence ∇ · V (solenoidal: ∇ · V = 0), curl ∇ × V (irrotational: ∇ × V = 0).
+4. Chapter 3 Dynamics: Projectile motion parabolic path y = x tan θ - [g / (2 v0² cos² θ)] x², range R = (v0² sin 2θ)/g, height H = (v0² sin² θ)/2g.
+5. Relative velocity: v_AB = v_A - v_B. Rain umbrella tan θ = v_person / v_rain.
+6. Circular motion: ω = 2π/T = 2πf, v = ω r, a_c = v²/r = ω² r.
+7. Provide structured LaTeX formulas and encouraging explanations.`;
 
         const contents: { role: string; parts: { text: string }[] }[] = [];
         if (body.history && Array.isArray(body.history)) {

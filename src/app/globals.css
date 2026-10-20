@@ -7,10 +7,29 @@
   --foreground: #241E20;
 }
 
+html,
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Kalpurush";
+  overflow-x: clip;
+  max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Responsive equation handling for mobile viewports */
+.katex-display {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  max-width: 100% !important;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.5rem 0;
+  margin: 0.5rem 0 !important;
+}
+
+.katex {
+  font-size: 1.02em;
+  max-width: 100%;
 }
 
 /* Custom scrollbars */
@@ -27,4 +46,13 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #781F3A;
+}
+
+/* Mobile tap target utility */
+@media (max-width: 768px) {
+  button, a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
 }

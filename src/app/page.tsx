@@ -15,6 +15,7 @@ import {
   Zap,
   Play,
   Languages,
+  Compass,
 } from 'lucide-react';
 import ProjectileLab from '@/components/simulations/ProjectileLab';
 
@@ -65,6 +66,59 @@ export default function HomePage() {
               >
                 <FlaskConical size={16} className="text-orange" />
                 <span>Explore the Physics Lab</span>
+              </Link>
+            </div>
+
+            {/* Chapter Selection Showcase (Compact & Distinct) */}
+            <div className="pt-6 max-w-2xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+              <Link
+                href="/chapters/vector"
+                className="group p-4 rounded-2xl bg-sand-surface border-2 border-orange/40 hover:border-orange transition-all shadow-xs flex items-center justify-between"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-orange-pale text-orange-deep border border-orange-light">
+                      Chapter 2
+                    </span>
+                    <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-forest-pale text-forest border border-forest-light">
+                      NEW CHAPTER
+                    </span>
+                  </div>
+                  <h3 className="text-sm font-bold text-maroon-deep group-hover:text-orange-deep transition-colors">
+                    Vector (ভেক্টর)
+                  </h3>
+                  <p className="text-[11px] text-sand-subtext">
+                    Dot/Cross Products, Riverboat & Vector Calculus
+                  </p>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-orange-pale text-orange-deep flex items-center justify-center shrink-0 group-hover:bg-orange group-hover:text-white transition-colors ml-3">
+                  <Compass size={18} />
+                </div>
+              </Link>
+
+              <Link
+                href="/lessons"
+                className="group p-4 rounded-2xl bg-sand-surface border-2 border-maroon/30 hover:border-maroon transition-all shadow-xs flex items-center justify-between"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-maroon-pale text-maroon-deep border border-maroon-light">
+                      Chapter 3
+                    </span>
+                    <span className="text-[10px] font-bold text-sand-subtext">
+                      CORE DYNAMICS
+                    </span>
+                  </div>
+                  <h3 className="text-sm font-bold text-maroon-deep group-hover:text-maroon transition-colors">
+                    Dynamics (গতিবিদ্যা)
+                  </h3>
+                  <p className="text-[11px] text-sand-subtext">
+                    Kinematics, Projectiles, Circular Motion & Atwood
+                  </p>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-maroon-pale text-maroon flex items-center justify-center shrink-0 group-hover:bg-maroon group-hover:text-white transition-colors ml-3">
+                  <BookOpen size={18} />
+                </div>
               </Link>
             </div>
           </div>

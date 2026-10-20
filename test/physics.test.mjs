@@ -374,4 +374,160 @@ console.log('\n--- 8. Testing Relative Velocity: River-Boat & Rain-Umbrella Mech
   console.log('✓ All Relative Velocity & Multi-Body Motion calculations verified.');
 }
 
+// -------------------------------------------------------------
+// 9. Chapter 2 Type 1: Dot Product & Cross Product Tests
+// -------------------------------------------------------------
+console.log('\n--- 9. Testing Chapter 2 Type 1: Dot Product & Cross Product ---');
+
+{
+  // Test 9.1: Dot Product, Magnitudes, and Angle (Dhaka Board 2015 Benchmark)
+  // A = 2i + 4j - 5k, B = i + 2j + 3k
+  const Ax = 2, Ay = 4, Az = -5;
+  const Bx = 1, By = 2, Bz = 3;
+  const dot = Ax * Bx + Ay * By + Az * Bz; // 2 + 8 - 15 = -5
+  approxEqual(dot, -5, EPSILON, 'Dot Product A · B');
+
+  const magA = Math.sqrt(Ax * Ax + Ay * Ay + Az * Az); // √45 = 6.7082
+  const magB = Math.sqrt(Bx * Bx + By * By + Bz * Bz); // √14 = 3.7417
+  approxEqual(magA, Math.sqrt(45), EPSILON, 'Magnitude |A|');
+  approxEqual(magB, Math.sqrt(14), EPSILON, 'Magnitude |B|');
+
+  const cosTheta = dot / (magA * magB);
+  const thetaDeg = (Math.acos(cosTheta) * 180) / Math.PI;
+  approxEqual(thetaDeg, 101.49, 0.02, 'Angle between vectors θ (101.49°)');
+
+  // Test 9.2: Orthogonality condition (Dhaka Board 2017)
+  // A = 2i + mj - 3k, B = 4i - 2j + 6k. When m = -5, A · B must equal 0
+  const m = -5;
+  const dotOrthogonal = (2 * 4) + (m * -2) + (-3 * 6); // 8 + 10 - 18 = 0
+  approxEqual(dotOrthogonal, 0, EPSILON, 'Orthogonal condition A · B = 0 for m = -5');
+
+  // Test 9.3: Cross Product and Parallelogram Area (Cumilla Board 2016)
+  // P = 3i - 2j + k, Q = i + 3j - 2k
+  // P × Q = | i j k ; 3 -2 1 ; 1 3 -2 | = (4 - 3)i - (-6 - 1)j + (9 + 2)k = 1i + 7j + 11k
+  const Px = 3, Py = -2, Pz = 1;
+  const Qx = 1, Qy = 3, Qz = -2;
+  const Cx = Py * Qz - Pz * Qy; // (-2)(-2) - (1)(3) = 4 - 3 = 1
+  const Cy = -(Px * Qz - Pz * Qx); // -[(3)(-2) - (1)(1)] = -[-6 - 1] = 7
+  const Cz = Px * Qy - Py * Qx; // (3)(3) - (-2)(1) = 9 + 2 = 11
+  approxEqual(Cx, 1, EPSILON, 'Cross Product x-component');
+  approxEqual(Cy, 7, EPSILON, 'Cross Product y-component');
+  approxEqual(Cz, 11, EPSILON, 'Cross Product z-component');
+
+  const crossMag = Math.sqrt(Cx * Cx + Cy * Cy + Cz * Cz); // √(1 + 49 + 121) = √171 ≈ 13.0767
+  approxEqual(crossMag, Math.sqrt(171), EPSILON, 'Parallelogram Area |P × Q|');
+  const triangleArea = 0.5 * crossMag;
+  approxEqual(triangleArea, 6.538, 0.01, 'Triangle Area ½ |P × Q|');
+
+  // Test 9.4: Anticommutativity of Cross Product: (P × Q) = -(Q × P)
+  const antiCx = Qy * Pz - Qz * Py;
+  const antiCy = -(Qx * Pz - Qz * Px);
+  const antiCz = Qx * Py - Qy * Px;
+  approxEqual(antiCx, -Cx, EPSILON, 'Anticommutativity x');
+  approxEqual(antiCy, -Cy, EPSILON, 'Anticommutativity y');
+  approxEqual(antiCz, -Cz, EPSILON, 'Anticommutativity z');
+
+  // Test 9.5: Unit normal vector magnitude must equal 1.0
+  const etaMag = Math.sqrt((Cx / crossMag) ** 2 + (Cy / crossMag) ** 2 + (Cz / crossMag) ** 2);
+  approxEqual(etaMag, 1.0, EPSILON, 'Unit Normal Vector Magnitude |η̂| = 1');
+
+  console.log('✓ Chapter 2 Type 1: Dot & Cross Product tests passed.');
+}
+
+// -------------------------------------------------------------
+// 10. Chapter 2 Type 2: Riverboat Navigation & Drift Mechanics
+// -------------------------------------------------------------
+console.log('\n--- 10. Testing Chapter 2 Type 2: Riverboat Navigation & Drift Mechanics ---');
+
+{
+  // Question Scenario: River width d = 500 m, Current u = 3 m/s, Boat speed v = 5 m/s (Dhaka 2019 & Dinajpur 2022)
+  const d = 500;
+  const u = 3;
+  const v = 5;
+
+  // Case A: Minimum Time Crossing (α = 90°)
+  const alphaMinDeg = 90;
+  const alphaMinRad = (alphaMinDeg * Math.PI) / 180;
+  const t_min = d / (v * Math.sin(alphaMinRad)); // 500 / 5 = 100 s
+  const drift_min = (u + v * Math.cos(alphaMinRad)) * t_min; // (3 + 0) * 100 = 300 m
+  const R_min = Math.sqrt(u * u + v * v); // √(9 + 25) = √34 ≈ 5.831 m/s
+  approxEqual(t_min, 100.0, EPSILON, 'Minimum Crossing Time (100 s)');
+  approxEqual(drift_min, 300.0, EPSILON, 'Downstream Drift at Min Time (300 m)');
+  approxEqual(R_min, Math.sqrt(34), EPSILON, 'Resultant Velocity at 90°');
+
+  // Case B: Shortest Path / Zero Drift (Landing Directly Opposite, x = 0)
+  // Condition: cos α = -u/v = -3/5 = -0.6
+  const cos_alpha_zd = -u / v;
+  const alpha_zd_rad = Math.acos(cos_alpha_zd);
+  const alpha_zd_deg = (alpha_zd_rad * 180) / Math.PI; // 126.87°
+  const R_zd = Math.sqrt(v * v - u * u); // √(25 - 9) = 4.0 m/s
+  const t_zd = d / R_zd; // 500 / 4 = 125 s
+  const net_vx_zd = u + v * Math.cos(alpha_zd_rad); // 3 + 5(-0.6) = 0
+  const drift_zd = net_vx_zd * t_zd; // 0 m
+
+  approxEqual(alpha_zd_deg, 126.87, 0.01, 'Zero Drift Angle α (126.87°)');
+  approxEqual(R_zd, 4.0, EPSILON, 'Effective Perpendicular Speed (4 m/s)');
+  approxEqual(t_zd, 125.0, EPSILON, 'Shortest Path Crossing Time (125 s)');
+  approxEqual(drift_zd, 0.0, EPSILON, 'Shortest Path Drift (0 m)');
+
+  // Time difference check: Boatman A is faster by exactly 25 seconds
+  approxEqual(t_zd - t_min, 25.0, EPSILON, 'Time Difference between Path A and Path B (25 s)');
+
+  // Case C: General Angle Drift (e.g. α = 120°, Dinajpur 2022)
+  // Boat speed v = 6 m/s, current u = 3 m/s, d = 500 m
+  const v_dinaj = 6;
+  const u_dinaj = 3;
+  const alpha_120_rad = (120 * Math.PI) / 180;
+  const vx_120 = u_dinaj + v_dinaj * Math.cos(alpha_120_rad); // 3 + 6(-0.5) = 0!
+  const vy_120 = v_dinaj * Math.sin(alpha_120_rad); // 6 * (√3/2) = 5.196 m/s
+  const t_120 = d / vy_120; // 500 / 5.196 = 96.225 s
+  const drift_120 = vx_120 * t_120; // 0 m
+  approxEqual(vx_120, 0.0, EPSILON, 'Zero horizontal velocity at 120° for v=6, u=3');
+  approxEqual(drift_120, 0.0, EPSILON, 'Zero drift at 120° for v=6, u=3');
+
+  console.log('✓ Chapter 2 Type 2: Riverboat Navigation & Drift tests passed.');
+}
+
+// -------------------------------------------------------------
+// 11. Chapter 2 Type 3: Vector Calculus (Gradient, Divergence & Curl)
+// -------------------------------------------------------------
+console.log('\n--- 11. Testing Chapter 2 Type 3: Vector Calculus ---');
+
+{
+  // Test 11.1: Gradient of Scalar Field φ = 3x²y - yz² + 2xz at (1, -1, 2) (Sylhet Board 2022)
+  // ∂φ/∂x = 6xy + 2z => at (1, -1, 2): 6(1)(-1) + 2(2) = -6 + 4 = -2
+  // ∂φ/∂y = 3x² - z² => at (1, -1, 2): 3(1)² - (2)² = 3 - 4 = -1
+  // ∂φ/∂z = -2yz + 2x => at (1, -1, 2): -2(-1)(2) + 2(1) = 4 + 2 = 6
+  const x = 1, y = -1, z = 2;
+  const gradX = 6 * x * y + 2 * z;
+  const gradY = 3 * x * x - z * z;
+  const gradZ = -2 * y * z + 2 * x;
+  approxEqual(gradX, -2, EPSILON, 'Gradient x-component at (1, -1, 2)');
+  approxEqual(gradY, -1, EPSILON, 'Gradient y-component at (1, -1, 2)');
+  approxEqual(gradZ, 6, EPSILON, 'Gradient z-component at (1, -1, 2)');
+
+  // Test 11.2: Divergence and Solenoidal Condition (Jashore Board 2016 & Rajshahi Board 2017)
+  // V = (x + 2y)i + (y - 3z)j + (x + az)k
+  // ∇ · V = ∂/∂x(x + 2y) + ∂/∂y(y - 3z) + ∂/∂z(x + az) = 1 + 1 + a = 2 + a
+  // For solenoidal: 2 + a = 0 => a = -2
+  const a_solenoidal = -2;
+  const divV = 1 + 1 + a_solenoidal;
+  approxEqual(divV, 0, EPSILON, 'Solenoidal field divergence ∇ · V = 0 when a = -2');
+
+  // Test 11.3: Curl and Irrotational Condition (Combined Board 2018)
+  // F = (2xy + z³)i + (x² + 2yz)j + (3xz² + y²)k
+  // curl F components:
+  // curl_x = ∂Fz/∂y - ∂Fy/∂z = 2y - 2y = 0
+  // curl_y = -(∂Fz/∂x - ∂Fx/∂z) = -(3z² - 3z²) = 0
+  // curl_z = ∂Fy/∂x - ∂Fx/∂y = 2x - 2x = 0
+  const curl_x = 2 * y - 2 * y;
+  const curl_y = -(3 * z * z - 3 * z * z);
+  const curl_z = 2 * x - 2 * x;
+  approxEqual(curl_x, 0, EPSILON, 'Curl x-component is zero');
+  approxEqual(curl_y, 0, EPSILON, 'Curl y-component is zero');
+  approxEqual(curl_z, 0, EPSILON, 'Curl z-component is zero');
+
+  console.log('✓ Chapter 2 Type 3: Vector Calculus (Grad, Div, Curl) tests passed.');
+}
+
 console.log('\n🎉 ALL MATHEMATICAL PHYSICS UNIT TESTS PASSED SUCCESSFULLY! 🌟\n');
