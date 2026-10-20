@@ -19,3 +19,4 @@ Thumbs.db
 
 # Large textbook binaries (keep safely on local disk, do not commit 200MB+ to git history)
 *.pdf
+temp_*/
