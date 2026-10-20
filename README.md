@@ -133,18 +133,50 @@ npm install
 # 3. Run the analytical physics test suite
 npm test
 
-# 4. Build the Next.js production bundle
+# 4. Build the Next.js static export bundle (outputs to out/)
 npm run build
 
-# 5. Start the production server
-npm run start -p 3000
+# 5. Preview locally with Cloudflare Pages emulator
+npm run preview:cloudflare
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your web browser to access the application.
+Open [http://localhost:3000](http://localhost:3000) (dev server) or [http://localhost:8788](http://localhost:8788) / [http://localhost:3001](http://localhost:3001) (Cloudflare Pages preview) in your browser.
 
 ---
 
-## 🧪 7. Analytical Physics Test Suite
+## ⚡ 7. Cloudflare Pages Deployment Guide
+
+The application is engineered as a zero-cold-start static export (`output: 'export'`) perfectly tailored for Cloudflare Pages with zero Vercel dependencies and $0/month hosting cost.
+
+### Option A: Cloudflare Dashboard (Recommended with Git)
+1. Log into your [Cloudflare Dashboard](https://dash.cloudflare.com/).
+2. Navigate to **Workers & Pages** > **Create application** > **Pages** > **Connect to Git**.
+3. Select your repository.
+4. Set the build configuration:
+   - **Framework preset:** `None` or `Next.js (Static HTML Export)`
+   - **Build command:** `npm run build`
+   - **Build output directory:** `out`
+   - **Root directory:** `/` (or leave blank)
+   - **Node.js version:** Set environment variable `NODE_VERSION = 20` (in Settings > Environment variables)
+5. Click **Save and Deploy**. Cloudflare automatically provisions edge CDN caching and issues a free `*.pages.dev` subdomain with automatic SSL.
+
+### Option B: Direct Deployment via Cloudflare Wrangler CLI
+If you prefer deploying directly from your terminal:
+```bash
+# 1. Authenticate with your Cloudflare account
+npx wrangler login
+
+# 2. Build the static production bundle
+npm run build
+
+# 3. Deploy the out/ directory directly to Cloudflare Pages
+npx wrangler pages deploy out --project-name=dynamicslab
+```
+Cloudflare Wrangler will upload all static pages, assets, and custom security headers from `public/_headers` directly to Cloudflare's global edge network.
+
+---
+
+## 🧪 8. Analytical Physics Test Suite
 
 The mathematical core of the platform is validated against textbook solutions and board questions via Node.js native test runner:
 

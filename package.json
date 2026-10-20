@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node test/physics.test.mjs"
+    "test": "node test/physics.test.mjs",
+    "preview:cloudflare": "wrangler pages dev out",
+    "deploy:cloudflare": "wrangler pages deploy out"
   },
   "dependencies": {
     "clsx": "^2.1.1",
