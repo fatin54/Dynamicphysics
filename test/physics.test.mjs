@@ -326,4 +326,52 @@ console.log('\n--- 7. Testing Ishak Sir Dynamics Curriculum Benchmarks ---');
   console.log('✓ All Ishak Sir Benchmark calculations verified.');
 }
 
+// -------------------------------------------------------------
+// 8. Relative Velocity & River-Boat / Rain-Umbrella Tests
+// -------------------------------------------------------------
+console.log('\n--- 8. Testing Relative Velocity: River-Boat & Rain-Umbrella Mechanics ---');
+
+{
+  // Test 8.1: River Crossing for Minimum Time vs Shortest Path (Dinajpur Board 2022)
+  // Width d = 1.2 km = 1200 m, river current u = 3 km/h = 3/3.6 m/s, boat speed v = 5 km/h = 5/3.6 m/s
+  const d_km = 1.2;
+  const u_kmh = 3.0;
+  const v_kmh = 5.0;
+
+  // Minimum time condition: α = 90°
+  const t_min_hours = d_km / v_kmh; // 0.24 hours = 14.4 minutes
+  const drift_km = u_kmh * t_min_hours; // 0.72 km = 720 meters
+  approxEqual(t_min_hours * 60, 14.4, EPSILON, 'River Minimum Time (14.4 min)');
+  approxEqual(drift_km * 1000, 720.0, EPSILON, 'River Drift on Minimum Time (720 m)');
+
+  // Shortest path condition: cos α = -u/v
+  const cos_alpha = -u_kmh / v_kmh; // -0.6
+  const alpha_deg = (Math.acos(cos_alpha) * 180) / Math.PI; // 126.8699°
+  const v_eff_kmh = Math.sqrt(v_kmh * v_kmh - u_kmh * u_kmh); // 4.0 km/h
+  const t_shortest_hours = d_km / v_eff_kmh; // 0.30 hours = 18.0 minutes
+  approxEqual(alpha_deg, 126.87, 0.01, 'Shortest Path Steering Angle (126.87°)');
+  approxEqual(v_eff_kmh, 4.0, EPSILON, 'Shortest Path Effective Velocity (4 km/h)');
+  approxEqual(t_shortest_hours * 60, 18.0, EPSILON, 'Shortest Path Time (18.0 min)');
+
+  // Test 8.2: Rain-Umbrella Tilt Angle (Barishal Board 2019)
+  // Rain v_r = 6 m/s vertically, cyclist v_c = 8 m/s horizontally
+  const v_rain = 6.0;
+  const v_cyclist = 8.0;
+  const tan_theta_umbrella = v_cyclist / v_rain; // 8 / 6 = 1.3333
+  const theta_umbrella_deg = (Math.atan(tan_theta_umbrella) * 180) / Math.PI; // 53.13°
+  const v_rain_impact = Math.sqrt(v_rain * v_rain + v_cyclist * v_cyclist); // 10.0 m/s
+  approxEqual(theta_umbrella_deg, 53.13, 0.01, 'Rain Umbrella Tilt Angle from Vertical');
+  approxEqual(v_rain_impact, 10.0, EPSILON, 'Rain Relative Impact Speed (10 m/s)');
+
+  // Test 8.3: Mid-air Meeting of Balloon Stone and Ground Stone (Rajshahi Board 2021)
+  // Stone 1: h0 = 65m, u1 = +12 m/s; Stone 2: u2 = +30 m/s from ground
+  // Meeting condition: 65 + 12t - 4.9t² = 30t - 4.9t² => 18t = 65 => t = 65/18 s ≈ 3.611 s
+  const t_meet = 65 / 18; // 3.6111 s
+  const y_meet = 30 * t_meet - 0.5 * g * t_meet * t_meet; // 30(3.611) - 4.9(13.04) = 108.33 - 63.90 = 44.44 m
+  approxEqual(t_meet, 3.611, 0.005, 'Mid-air Stones Meeting Time (3.61 s)');
+  approxEqual(y_meet, 44.44, 0.05, 'Mid-air Stones Meeting Altitude (44.44 m)');
+
+  console.log('✓ All Relative Velocity & Multi-Body Motion calculations verified.');
+}
+
 console.log('\n🎉 ALL MATHEMATICAL PHYSICS UNIT TESTS PASSED SUCCESSFULLY! 🌟\n');

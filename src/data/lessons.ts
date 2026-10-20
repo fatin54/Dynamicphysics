@@ -474,6 +474,179 @@ export const LESSONS_DATABASE: Lesson[] = [
     simulationId: 'motion-graphs-lab',
   },
   {
+    id: 'lesson-relative-velocity',
+    topicId: 'topic-relative-velocity',
+    sectionNumber: '৩.৮',
+    titleEn: 'Relative Velocity: River-Boat & Rain-Umbrella',
+    titleBn: 'আপেক্ষিক বেগ: নদী-নৌকা ও বৃষ্টি-ছাতা',
+    category: 'kinematics',
+    isOfficialChapter3: true,
+    estimatedMinutes: 30,
+    layerA_Intuitive: {
+      everydayScenario: 'Imagine you are riding a CNG auto-rickshaw through a heavy Dhaka monsoon downpour. If the CNG is stopped at a traffic light, rain falls straight down on the roof. But the second the driver zooms forward at 40 km/h, rain suddenly streaks diagonally, slamming right into the front windscreen! Why did the rain change direction? It didn\'t—you changed your reference frame!',
+      banglaScenario: 'বর্ষার দিনে তুমি একটি রিকশায় বসে আছো। রিকশা স্থির থাকলে বৃষ্টি ঠিক তোমার মাথার উপর খাড়া নিচে পড়ে। কিন্তু রিকশাওয়ালা যখনই জোরে প্যাডেল চালাতে শুরু করে, বৃষ্টি মনে হয় সামনের দিক থেকে তীর্যকভাবে মুখে এসে আঘাত করে! বৃষ্টি নিজের দিক বদলায়নি, তোমার গতির কারণে বৃষ্টির আপেক্ষিক বেগ বদলে গেছে।',
+      coreIdea: 'Whenever two objects move simultaneously, observer B sees object A moving with a combined velocity: Vector of A minus Vector of B (v_AB = v_A - v_B).',
+      banglaCoreIdea: 'গতিশীল কোনো পর্যবেক্ষকের সাপেক্ষে অন্য গতিশীল বস্তুর পর্যবেক্ষণকৃত বেগই আপেক্ষিক বেগ। ভেক্টরের ভাষায়: ১ম বস্তুর বেগ থেকে ২য় বস্তুর বেগের ভেক্টর বিয়োগফলই আপেক্ষিক বেগ (v_AB = v_A - v_B)।',
+      analogy: 'Think of walking on an airport moving travelator. If you walk forward at 2 m/s on a walkway moving at 1 m/s, someone outside sees you at 3 m/s. But if you walk backward at 1 m/s, to the person outside you appear completely frozen in space!',
+      keyObservation: 'In a flowing river, the boat\'s actual ground trajectory is the vector sum of its motor velocity and the river current: v_ground = v_boat + v_river.',
+    },
+    layerB_Academic: {
+      formalDefinition: 'Relative Velocity is the vector time rate of change of the position of one moving object with respect to another moving reference frame or observer: \\vec{v}_{A/B} = \\vec{v}_A - \\vec{v}_B.',
+      banglaFormalDefinition: 'গতিশীল কোনো পর্যবেক্ষকের সাপেক্ষে অন্য কোনো গতিশীল বস্তুর অবস্থান পরিবর্তনের ভেক্টর হারকে আপেক্ষিক বেগ বলে। গাণিতিকভাবে: \\vec{v}_{A/B} = \\vec{v}_A - \\vec{v}_B।',
+      physicalPrinciple: 'In classical Galilean dynamics, velocities add vectorially. To find the velocity of body A relative to body B, superimpose a velocity of -\\vec{v}_B on both bodies (effectively bringing observer B to rest).',
+      keyEquations: [
+        '\\vec{v}_{A/B} = \\vec{v}_A - \\vec{v}_B \\quad (\\text{Relative Velocity Definition})',
+        't_{\\min} = \\frac{d}{v} \\quad (\\text{River Crossing with Minimum Time, } \\alpha = 90^\\circ)',
+        '\\cos\\alpha = -\\frac{u}{v} \\implies v_{\\text{resultant}} = \\sqrt{v^2 - u^2} \\quad (\\text{Shortest Path / Straight Across})',
+        '\\tan\\theta = \\frac{v_{\\text{person}}}{v_{\\text{rain}}} \\quad (\\text{Umbrella Tilt Angle from Vertical})',
+      ],
+      assumptions: [
+        'The water current flows at uniform constant speed u parallel to straight parallel banks',
+        'Boat engine delivers constant speed v relative to the water',
+        'Raindrops fall at constant terminal speed v_rain vertically downward',
+      ],
+      derivation: {
+        title: 'River Crossing: Minimum Time vs. Shortest Distance',
+        steps: [
+          {
+            stepNumber: 1,
+            description: 'Define axes and boat steering angle α relative to downstream bank',
+            latex: 'v_x = u + v \\cos\\alpha, \\quad v_y = v \\sin\\alpha',
+            explanation: 'The current flows along +x. The vertical velocity component crossing the river width d is solely v_y = v sin α.',
+          },
+          {
+            stepNumber: 2,
+            description: 'Derive crossing time formula t = d / v_y',
+            latex: 't = \\frac{d}{v_y} = \\frac{d}{v \\sin\\alpha}',
+            explanation: 'To minimize crossing time t, we must maximize the denominator sin α. The maximum of sin α is 1, which occurs when α = 90°!',
+          },
+          {
+            stepNumber: 3,
+            description: 'Condition for Minimum Time',
+            latex: 't_{\\min} = \\frac{d}{v}, \\quad x_{\\text{drift}} = v_x \\cdot t_{\\min} = u \\left(\\frac{d}{v}\\right)',
+            explanation: 'Steering perpendicular (90°) crosses fastest, but the boat drifts downstream by distance x = u(d/v).',
+          },
+          {
+            stepNumber: 4,
+            description: 'Condition for Shortest Path (Directly Opposite Bank, Zero Drift)',
+            latex: 'v_x = 0 \\implies u + v \\cos\\alpha = 0 \\implies \\cos\\alpha = -\\frac{u}{v}',
+            explanation: 'To land directly opposite, net horizontal velocity must be zero. The boat must head upstream at angle α > 90°. This is physically possible only if boat speed v > river speed u!',
+          },
+        ],
+      },
+    },
+    layerC_ExamReady: {
+      highFrequencyTrends: 'Extremely high-frequency Creative Question (Ga and Gha) topic across Dhaka, Dinajpur, Cumilla, and Barishal boards. Questions typically ask students to compare the crossing times of two boatmen (one choosing shortest time, the other shortest distance) or determine whether a cyclist will get wet at different speeds.',
+      examinerTips: [
+        'In river problems, always clearly distinguish between: (1) Minimum Time (steer at α = 90°, t = d/v) and (2) Shortest Path (steer upstream with cos α = -u/v, t = d / √(v² - u²)).',
+        'For umbrella problems, ALWAYS state the reference line for the angle: "θ is measured with respect to the vertical". If you measure from the horizontal, explicitly write (90° - θ).',
+        'Check physical feasibility: If river speed u is greater than boat speed v (u > v), the boat CANNOT cross straight across (cos α = -u/v would exceed 1).',
+      ],
+      commonTraps: [
+        'Believing steering straight across (90°) will land the boat straight across. Remember: current sweeps the boat downstream!',
+        'Holding the umbrella backwards. The cyclist must tilt the umbrella FORWARD into their own direction of motion.',
+        'Using vector addition instead of vector subtraction for relative velocity of rain: \\vec{v}_{\\text{rain/man}} = \\vec{v}_{\\text{rain}} - \\vec{v}_{\\text{man}}.',
+      ],
+      sampleQuestionSummary: 'Dhaka Board 2019, Dinajpur Board 2022: Boat A steers at 90° while Boat B steers at 120° to current. Compare arrival times and drift.',
+    },
+    workedExamples: [
+      {
+        id: 'we-river-crossing',
+        title: 'River Crossing: Fastest Crossing vs Direct Opposite Bank',
+        banglaTitle: 'নদী পারাপার: দ্রুততম সময় বনাম সোজাসুজি পারাপার',
+        problemStatement: 'A river is 1.5 km wide and flows east at 4 km/h. An engine boat can travel at 8 km/h in still water. (a) What is the minimum time needed to cross the river, and how far downstream will the boat land? (b) At what angle to the current must the boat head to reach the point directly opposite on the other bank, and what will be the crossing time?',
+        banglaStatement: 'একটি নদীর প্রস্থ ১.৫ কিমি এবং স্রোতের বেগ ৪ কিমি/ঘণ্টা। একটি ইঞ্জিনের নৌকা স্থির পানিতে ৮ কিমি/ঘণ্টা বেগে চলতে পারে। (ক) নদীটি পার হওয়ার ন্যূনতম সময় কত এবং নৌকাটি অপর পাড়ের কত দূরে গিয়ে পৌঁছাবে? (খ) সোজাসুজি বিপরীত বিন্দুতে পৌঁছাতে হলে স্রোতের সাথে কত কোণে নৌকা চালাতে হবে এবং কত সময় লাগবে?',
+        givenData: [
+          { symbol: 'd', value: '1.5', unit: 'km', description: 'Width of the river' },
+          { symbol: 'u', value: '4', unit: 'km/h', description: 'Speed of river current' },
+          { symbol: 'v', value: '8', unit: 'km/h', description: 'Speed of boat in still water' },
+        ],
+        targetVariable: { symbol: 't_min, x, \\alpha, t_opposite', unit: 'hours, km, degrees', description: 'Crossing times, drift, and steering angle' },
+        formulaUsed: 't_{\\min} = \\frac{d}{v}, \\quad x = u \\cdot t_{\\min}, \\quad \\cos\\alpha = -\\frac{u}{v}, \\quad t = \\frac{d}{\\sqrt{v^2 - u^2}}',
+        solutionSteps: [
+          {
+            step: 'Part (a): For Minimum Time, boat steers perpendicular to the bank (\\alpha = 90^\\circ):',
+            latex: 't_{\\min} = \\frac{d}{v} = \\frac{1.5}{8} = 0.1875 \\text{ hours} = 11.25 \\text{ minutes}',
+          },
+          {
+            step: 'Calculate downstream drift caused by current during this time:',
+            latex: 'x = u \\cdot t_{\\min} = 4 \\times 0.1875 = 0.75 \\text{ km} = 750 \\text{ meters downstream}',
+          },
+          {
+            step: 'Part (b): For Shortest Path (direct opposite bank, zero drift), horizontal resultant must be zero:',
+            latex: '\\cos\\alpha = -\\frac{u}{v} = -\\frac{4}{8} = -0.5 \\implies \\alpha = \\arccos(-0.5) = 120^\\circ',
+          },
+          {
+            step: 'The boat must steer at 120° to the river current (30° upstream from perpendicular). Calculate resultant speed and time:',
+            latex: 'v_{\\text{eff}} = \\sqrt{v^2 - u^2} = \\sqrt{8^2 - 4^2} = \\sqrt{48} \\approx 6.928 \\text{ km/h}',
+          },
+          {
+            step: 'Crossing time along shortest path:',
+            latex: 't_{\\text{opposite}} = \\frac{d}{v_{\\text{eff}}} = \\frac{1.5}{6.928} \\approx 0.2165 \\text{ hours} = 12.99 \\text{ minutes}',
+          },
+        ],
+        finalAnswer: '(a) t_min = 11.25 min, drift = 750 m; (b) Angle α = 120° to current, t_opposite = 12.99 min.',
+        keyTakeaway: 'The shortest distance path takes longer (12.99 min vs 11.25 min) because some motor power is spent fighting the upstream river current.',
+        boardSource: 'Dhaka Board 2019 / Dinajpur Board 2022',
+      },
+      {
+        id: 'we-rain-umbrella',
+        title: 'Umbrella Angle for a Moving Cyclist in Rain',
+        banglaTitle: 'বৃষ্টিতে সাইকেল আরোহীর ছাতা ধরার কোণ',
+        problemStatement: 'Rain is falling vertically downwards at 10 m/s. A student rides a bicycle horizontally along a flat road at 10 m/s towards the North. (a) At what angle with the vertical must the student hold an umbrella to protect themselves from getting wet? (b) With what relative speed does the rain strike the student?',
+        banglaStatement: '১০ মি/সে বেগে খাড়া নিচের দিকে বৃষ্টি পড়ছে। একজন শিক্ষার্থী উত্তর দিকে ১০ মি/সে বেগে সাইকেল চালিয়ে যাচ্ছে। (ক) শিক্ষার্থীকে বৃষ্টি থেকে বাঁচতে উলম্বের সাথে কত কোণে ছাতা ধরতে হবে? (খ) বৃষ্টির ফোঁটা কত আপেক্ষিক বেগে শিক্ষার্থীর গায়ে আঘাত করবে?',
+        givenData: [
+          { symbol: 'v_r', value: '10', unit: 'm/s', description: 'Velocity of rain downwards (-\\hat{j})' },
+          { symbol: 'v_c', value: '10', unit: 'm/s', description: 'Velocity of cyclist horizontal (+\\hat{i})' },
+        ],
+        targetVariable: { symbol: '\\theta, v_{rel}', unit: 'degrees, m/s', description: 'Tilt angle from vertical and relative impact speed' },
+        formulaUsed: '\\vec{v}_{\\text{rel}} = \\vec{v}_r - \\vec{v}_c, \\quad \\tan\\theta = \\frac{v_c}{v_r}',
+        solutionSteps: [
+          {
+            step: 'Vector formulation: Relative velocity of rain with respect to cyclist:',
+            latex: '\\vec{v}_{\\text{rel}} = \\vec{v}_r - \\vec{v}_c = -10\\hat{j} - 10\\hat{i} = -10\\hat{i} - 10\\hat{j} \\text{ m/s}',
+          },
+          {
+            step: 'Calculate tilt angle \\theta with the vertical line:',
+            latex: '\\tan\\theta = \\frac{|v_c|}{|v_r|} = \\frac{10}{10} = 1 \\implies \\theta = \\arctan(1) = 45^\\circ',
+          },
+          {
+            step: 'The student must tilt the umbrella 45° forward towards the North from the vertical.',
+            latex: '\\text{Direction: } 45^\\circ \\text{ tilted forward towards North from vertical}',
+          },
+          {
+            step: 'Calculate relative impact speed:',
+            latex: 'v_{\\text{rel}} = \\sqrt{v_r^2 + v_c^2} = \\sqrt{10^2 + 10^2} = \\sqrt{200} = 10\\sqrt{2} \\approx 14.14 \\text{ m/s}',
+          },
+        ],
+        finalAnswer: 'Umbrella tilt angle: 45° forward from vertical towards North; Impact speed: 14.14 m/s.',
+        keyTakeaway: 'Motion increases the apparent impact speed of raindrops (from 10 m/s to 14.14 m/s) and shifts the apparent arrival direction forward.',
+        boardSource: 'Cumilla Board 2019 / Ishak Sir Benchmark',
+      },
+    ],
+    misconceptions: [
+      {
+        wrongBelief: 'Steering the boat straight toward the opposite bank (α = 90°) will take the boat directly to the opposite landing pier.',
+        scientificTruth: 'No. The river current pushes the boat horizontally, creating a diagonal resultant path. To land directly opposite, the boat must head upstream (α > 90°).',
+        whyItMatters: 'Confusing shortest time with shortest distance causes total mark loss in Part (Ga) and (Gha) board questions.',
+        quickCheck: 'Steering at 90° gives MINIMUM TIME, but NOT minimum distance!',
+      },
+      {
+        wrongBelief: 'You can always cross a river straight across regardless of boat engine speed.',
+        scientificTruth: 'Zero drift is ONLY possible if boat speed in still water is strictly greater than river current speed (v > u). If v <= u, the current inevitably sweeps the boat downstream.',
+        whyItMatters: 'cos α = -u/v has no mathematical solution if |u/v| > 1.',
+        quickCheck: 'If river flows at 10 km/h, a 5 km/h boat can NEVER land straight across.',
+      },
+    ],
+    quickRecap: [
+      'Relative velocity definition: v_AB = v_A - v_B',
+      'Fastest river crossing: Steer at 90° to bank; t_min = d / v; drift x = u (d/v)',
+      'Direct opposite bank (zero drift): cos α = -u/v; requires v > u; t = d / √(v² - u²)',
+      'Umbrella tilt angle from vertical: tan θ = v_person / v_rain (tilt forward into motion)',
+    ],
+    simulationId: 'motion-graphs-lab',
+  },
+  {
     id: 'lesson-falling-bodies',
     topicId: 'topic-falling-bodies',
     sectionNumber: '৩.৯',

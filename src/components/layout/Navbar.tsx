@@ -14,6 +14,7 @@ import {
   Menu,
   X,
   Languages,
+  Play,
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -23,11 +24,12 @@ export default function Navbar() {
 
   const navLinks = [
     { href: '/lessons', label: 'Lessons', labelBn: 'অধ্যায় পাঠ', icon: BookOpen },
+    { href: '/one-shot-class', label: 'One-Shot Class', labelBn: 'ম্যারাথন ক্লাস', icon: Play },
     { href: '/lab', label: 'Physics Lab', labelBn: 'পদার্থবিজ্ঞান ল্যাব', icon: FlaskConical },
-    { href: '/formulas', label: 'Formula Explorer', labelBn: 'সূত্র সম্ভার', icon: Calculator },
-    { href: '/questions', label: '10-Yr Board Bank', labelBn: '১০ বছরের বোর্ড প্রশ্ন', icon: GraduationCap },
+    { href: '/formulas', label: 'Formulas', labelBn: 'সূত্র সম্ভার', icon: Calculator },
+    { href: '/questions', label: 'Board Bank', labelBn: '১০ বছরের বোর্ড প্রশ্ন', icon: GraduationCap },
+    { href: '/glossary', label: 'Glossary', labelBn: 'শব্দকোষ', icon: Languages },
     { href: '/cq-solver', label: 'CQ Solver', labelBn: 'সৃজনশীল সমাধান', icon: Compass },
-    { href: '/quiz', label: 'Practice Quiz', labelBn: 'মডেল কুইজ', icon: Award },
     { href: '/tutor', label: 'AI Tutor', labelBn: 'পদার্থবিজ্ঞান শিক্ষক', icon: Sparkles },
   ];
 

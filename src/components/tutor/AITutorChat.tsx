@@ -1,7 +1,18 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Sparkles, Send, Bot, User, Languages, BookOpen, Lightbulb } from 'lucide-react';
+import {
+  Sparkles,
+  Send,
+  Bot,
+  User,
+  Languages,
+  BookOpen,
+  Lightbulb,
+  ShieldCheck,
+  Zap,
+  Info,
+} from 'lucide-react';
 
 interface Message {
   role: 'assistant' | 'user';
@@ -9,108 +20,192 @@ interface Message {
   banglaText?: string;
   equations?: string[];
   suggestedFollowUp?: string[];
+  source?: 'Live AI (Gemini)' | 'Offline Socratic Engine';
 }
 
 export default function AITutorChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      text: 'Assalamu Alaikum! I am your HSC Dynamics AI Tutor. I can explain any concept from Chapter 3 (গতিবিদ্যা) or Chapter 4 Forces—from simple everyday analogies (like I\'m 8) to rigorous mathematical proofs and 10-year board question tricks. What topic would you like to explore today?',
-      banglaText: 'আসসালামু আলাইকুম! আমি তোমার এইচএসসি গতিবিদ্যা ও বলবিদ্যা শিক্ষক। ৩য় অধ্যায়ের যেকোনো কনসেপ্ট সহজ উদাহরণ থেকে শুরু করে বোর্ড পরীক্ষার কঠিন সৃজনশীল প্রশ্নের সমাধান পর্যন্ত বুঝিয়ে দিতে পারি। আজ তুমি কোনটি শিখতে চাও?',
+      text: 'Assalamu Alaikum! I am your HSC Dynamics AI Tutor. I can explain any concept from Chapter 3 (গতিবিদ্যা) and Chapter 4 Forces—from intuitive everyday analogies to rigorous mathematical proofs, video shortcuts, and 10-year Bangladesh board questions. What would you like to explore today?',
+      banglaText: 'আসসালামু আলাইকুম! আমি তোমার এইচএসসি গতিবিদ্যা ও বলবিদ্যা শিক্ষক। ৩য় অধ্যায়ের যেকোনো কনসেপ্ট সহজ উদাহরণ থেকে শুরু করে গাণিতিক প্রমাণ, ভিডিও শর্টকাট ও বোর্ড প্রশ্নের সমাধান বুঝিয়ে দিতে পারি। আজ তুমি কোনটি শিখতে চাও?',
       suggestedFollowUp: [
         'Why does a heavier object not fall faster?',
-        'Explain projectile motion like I am 8',
-        'Why don\'t action and reaction forces cancel?',
         'How to prove the trajectory of prass is a parabola?',
+        'River crossing: minimum time vs shortest distance',
+        'Rain-umbrella angle when cycling at 10 m/s',
+        'Why is uniform circular motion accelerated motion?',
       ],
+      source: 'Offline Socratic Engine',
     },
   ]);
 
   const [input, setInput] = useState<string>('');
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [preferBangla, setPreferBangla] = useState<boolean>(false);
+  const [activeEngine, setActiveEngine] = useState<'Live AI (Gemini)' | 'Offline Socratic Engine'>('Offline Socratic Engine');
 
-  // Deterministic curated physics knowledge fallback engine
-  const generateResponse = (prompt: string): Message => {
+  // Curated deterministic offline physics engine
+  const generateOfflineResponse = (prompt: string): Message => {
     const p = prompt.toLowerCase();
 
-    if (p.includes('heavier') || p.includes('fall') || p.includes('galileo') || p.includes('ভারী') || p.includes('পড়ন্ত')) {
+    if (p.includes('river') || p.includes('boat') || p.includes('নদী') || p.includes('নৌকা')) {
       return {
         role: 'assistant',
-        text: `Great question! Here is why heavier objects do NOT fall faster in a vacuum:\n\n1. Socratic Step: What two things determine acceleration according to Newton\'s 2nd Law?\nFormula: a = F_net / m.\n\n2. The Gravitational Pull on a body of mass m is F = mg. A 10 kg iron ball experiences 10 times more downward gravitational force than a 1 kg ball!\n\n3. BUT a 10 kg ball also has 10 times more INERTIA (resistance to acceleration)! When you divide the force by the mass:\na = (m g) / m = g = 9.8 m/s².\n\nThe mass m cancels out completely! Therefore, all objects accelerate at the exact same rate g = 9.8 m/s² regardless of weight. The only reason a feather drifts down slowly in a room is air resistance (aerodynamic drag), not its mass!`,
-        banglaText: `চমৎকার প্রশ্ন! বায়ুশূন্য স্থানে ভারী বস্তু কেন বেশি দ্রুত পড়ে না তা জেনে নাও:\n\n১. নিউটনের ২য় সূত্র বলে: a = F / m।\n২. একটি ১০ কেজি বস্তুর উপর পৃথিবীর আকর্ষণ বল (F = mg) ১ কেজি বস্তুর চেয়ে ১০ গুণ বেশি।\n৩. কিন্তু ১০ কেজি বস্তুর জড়তাও (গতি পরিবর্তনে বাধা) ঠিক ১০ গুণ বেশি! ফলে যখন বলকে ভর দিয়ে ভাগ করা হয়:\na = (mg) / m = g = ৯.৮ m/s²।\n\nভর m পুরোপুরি কাটাকাটি হয়ে যায়! একারণেই বায়ুশূন্য স্থানে পালক ও লোহার বল একই সাথে নিচে পড়ে।`,
+        text: `Here is the complete mechanics of River-Boat Crossing (নদী ও নৌকা পারাপার):\n\n1. Crossing with Minimum Time:\nTo cross as quickly as possible, point the boat perpendicular to the river bank (steering angle α = 90° to the current). In this case:\n• Crossing time: t_min = d / v (where d = river width, v = boat speed in still water).\n• Downstream drift: The river current u pushes the boat downstream by x = u · t_min.\n\n2. Crossing with Shortest Distance (Directly Opposite Bank, Zero Drift):\nTo reach the opposite pier without drifting downstream, the horizontal velocity component must cancel the current: u + v cos α = 0.\n• Steering angle: cos α = -u / v (boat heads upstream at α > 90°).\n• Resultant speed across: v_eff = √(v² - u²).\n• Crossing time: t = d / √(v² - u²).\n\nKey Feasibility Check: Zero drift is ONLY physically possible if boat speed v is greater than river speed u (v > u). If v ≤ u, the boat cannot cross straight across!`,
+        banglaText: `নদী পারাপারের দুটি মূল নিয়ম:\n১. দ্রুততম সময়ে পার হওয়া: তীরের সাথে ৯০° কোণে নৌকা চালালে t_min = d / v সময় লাগে, তবে নৌকাটি ভাটির দিকে x = u · t দূরে ভেসে যায়।\n২. সোজাসুজি পার হওয়া (ন্যূনতম দূরত্ব): উজানের দিকে cos α = -u/v কোণে নৌকা চালালে নৌকা সোজাসুজি ওপারে পৌঁছাবে। কার্যকর বেগ = √(v² - u²)। শর্ত: নৌকার বেগ v > স্রোতের বেগ u হতে হবে।`,
+        equations: [
+          't_{\\min} = \\frac{d}{v} \\quad (\\alpha = 90^\\circ)',
+          '\\cos\\alpha = -\\frac{u}{v} \\implies v_{\\text{eff}} = \\sqrt{v^2 - u^2} \\quad (\\text{Shortest Path})',
+        ],
+        suggestedFollowUp: [
+          'What happens if boat speed is less than river current?',
+          'How to calculate rain umbrella angle for a cyclist?',
+        ],
+        source: 'Offline Socratic Engine',
+      };
+    } else if (p.includes('rain') || p.includes('umbrella') || p.includes('বৃষ্টি') || p.includes('ছাতা')) {
+      return {
+        role: 'assistant',
+        text: `Here is how to calculate the Umbrella Angle for a moving person in rain:\n\n1. Relative Velocity Concept:\nWhen rain falls vertically with velocity \\vec{v}_r = -v_r \\hat{j} and a person walks horizontally with velocity \\vec{v}_p = v_p \\hat{i}, the relative velocity of rain as felt by the person is:\n\\vec{v}_{\\text{rel}} = \\vec{v}_r - \\vec{v}_p = -v_p \\hat{i} - v_r \\hat{j}.\n\n2. Umbrella Tilt Angle:\nThe person must tilt the umbrella into the oncoming relative rain vector. Measuring angle θ with respect to the VERTICAL:\n\\tan\\theta = \\frac{|\\vec{v}_p|}{|\\vec{v}_r|} = \\frac{v_{\\text{person}}}{v_{\\text{rain}}}.\n\n3. Apparent Rain Impact Speed:\nv_{\\text{rel}} = \\sqrt{v_{\\text{rain}}^2 + v_{\\text{person}}^2}.\n\nExaminer Tip: Always state explicitly that the angle θ is measured from the vertical! If measured from the horizontal ground, the angle is (90° - θ).`,
+        banglaText: `বৃষ্টির মধ্যে ছাতা ধরার নিয়ম:\nবৃষ্টি খাড়া নিচে পড়লে এবং ব্যক্তি v_p বেগে সামনে হাঁটলে বৃষ্টির আপেক্ষিক বেগ ব্যক্তিটির দিকে হেলে যায়।\nউলম্বের সাথে ছাতার কোণ: tan θ = v_ব্যক্তি / v_বৃষ্টি।\nআপেক্ষিক আঘাতের দ্রুতি: v_rel = √(v_বৃষ্টি² + v_ব্যক্তি²)।`,
+        equations: [
+          '\\tan\\theta = \\frac{v_{\\text{person}}}{v_{\\text{rain}}} \\quad (\\theta \\text{ measured from vertical})',
+          'v_{\\text{rel}} = \\sqrt{v_{\\text{rain}}^2 + v_{\\text{person}}^2}',
+        ],
+        suggestedFollowUp: [
+          'What if wind is also blowing in the same direction?',
+          'Explain river boat crossing',
+        ],
+        source: 'Offline Socratic Engine',
+      };
+    } else if (p.includes('heavier') || p.includes('fall') || p.includes('galileo') || p.includes('ভারী') || p.includes('পড়ন্ত')) {
+      return {
+        role: 'assistant',
+        text: `Here is why heavier objects do NOT fall faster in a vacuum:\n\n1. Newton's 2nd Law states: a = F_net / m.\n\n2. The Gravitational Force on mass m is F = mg. A 10 kg iron ball experiences 10 times more downward force than a 1 kg ball.\n\n3. BUT the 10 kg ball also possesses 10 times more INERTIA (resistance to acceleration)! Dividing force by mass gives:\na = (m g) / m = g = 9.8 m/s².\n\nThe mass m cancels out completely! All freely falling objects accelerate at the exact same rate g = 9.8 m/s² regardless of weight. Feathers fall slower in air solely because of aerodynamic air resistance, as demonstrated by the Apollo 15 astronaut dropping a hammer and feather on the Moon.`,
+        banglaText: `বায়ুশূন্য স্থানে ভারী বস্তু কেন বেশি দ্রুত পড়ে না:\n১. নিউটনের ২য় সূত্র: a = F / m।\n২. ১০ কেজি বস্তুর উপর পৃথিবীর আকর্ষণ বল ১ কেজির চেয়ে ১০ গুণ বেশি।\n৩. কিন্তু ১০ কেজি বস্তুর জড়তাও ঠিক ১০ গুণ বেশি! ভাগ করলে ভর m কাটাকাটি হয়ে যায়:\na = (mg) / m = g = ৯.৮ m/s²।\nসুতরাং সব বস্তু সমান ত্বরণে নিচে পড়ে।`,
         equations: ['a = \\frac{F}{m} = \\frac{mg}{m} = g = 9.8 \\text{ m/s}^2'],
         suggestedFollowUp: [
-          'What did Apollo 15 do on the Moon?',
           'State Galileo\'s three laws of falling bodies',
+          'What is the stone drop equation from an ascending balloon?',
         ],
+        source: 'Offline Socratic Engine',
       };
     } else if (p.includes('projectile') || p.includes('prass') || p.includes('parabola') || p.includes('প্রাস') || p.includes('পরাবৃত্ত')) {
       return {
         role: 'assistant',
-        text: `Let's explain Projectile Motion (প্রাস) with complete clarity!\n\nIntuition: Imagine kicking a soccer ball obliquely into the sky at angle θ₀ with speed V₀. The ball performs two completely separate motions at the same time:\n\n1. Horizontal Motion: There is no horizontal gravity or force in the air (a_x = 0). So the ball coasts sideways at constant speed: v_x = V₀ cos θ₀.\n\n2. Vertical Motion: Gravity pulls it downward with acceleration a_y = -g. So it decelerates going up, stops for an instant at the peak (v_y = 0), and accelerates coming down!\n\nProof of Parabola: From x = (V₀ cos θ₀) t, we get t = x / (V₀ cos θ₀). Substituting t into y = (V₀ sin θ₀)t - 0.5gt² gives:\ny = (tan θ₀) x - [g / (2 V₀² cos² θ₀)] x².\nSince y is a quadratic function of x with a negative x² coefficient, it is a Parabola!`,
-        banglaText: `প্রাসের গতিপথ পরাবৃত্ত হওয়ার কারণ:\n\nঅনুভূমিক দিকে কোনো বল নেই (a_x = 0), তাই অনুভূমিক বেগ সর্বদা সমবেগ: v_x = V₀ cos θ₀।\nউলম্ব দিকে অভিকর্ষজ ত্বরণ g সর্বদা নিচের দিকে টানে।\nসময়ের মান অপনয়ন করলে পাওয়া যায়: y = Ax - Bx² যা একটি পরাবৃত্ত বা প্যারাবোলার সমীকরণ।`,
+        text: `Let's break down Projectile Motion (প্রাস) with complete mathematical rigor:\n\n1. Independence of Motions:\n• Horizontal Motion: a_x = 0 (no gravity horizontally), so horizontal velocity remains strictly constant: v_x = v_0 cos θ_0; x = (v_0 cos θ_0) t.\n• Vertical Motion: a_y = -g, so vertical velocity decelerates going up and accelerates down: v_y = v_0 sin θ_0 - gt; y = (v_0 sin θ_0)t - 0.5gt².\n\n2. Proof of Parabolic Trajectory:\nExpress time from horizontal motion: t = x / (v_0 cos θ_0).\nSubstitute t into the vertical equation:\ny = (tan θ_0) x - [g / (2 v_0² cos² θ_0)] x².\nBecause y is a quadratic function of x with a negative x² coefficient, the path is a Parabola!\n\n3. Core Projectile Formulas:\n• Maximum Height: H = (v_0² sin² θ_0) / 2g\n• Time of Flight: T = (2 v_0 sin θ_0) / g\n• Horizontal Range: R = (v_0² sin 2θ_0) / g (Maximum at θ_0 = 45°)\n• Complementary Angle Identity: R(θ) = R(90° - θ)`,
+        banglaText: `প্রাসের গতিপথ পরাবৃত্ত হওয়ার কারণ:\nঅনুভূমিক দিকে ত্বরণ নেই (ax = 0), তাই vx = v0 cos θ0 সমবেগ। উলম্ব দিকে অভিকর্ষ ত্বরণ ay = -g।\nসময় t অপনয়ন করলে পাওয়া যায়: y = (tan θ0)x - [g/(2v0² cos² θ0)]x² যা একটি পরাবৃত্তের সমীকরণ।\nপাল্লা R = (v0² sin 2θ0)/g এবং ৪৫° কোণে পাল্লা সর্বোচ্চ হয়।`,
         equations: [
-          'x = (V_0 \\cos\\theta_0) t \\implies t = \\frac{x}{V_0 \\cos\\theta_0}',
-          'y = (\\tan\\theta_0) x - \\left( \\frac{g}{2 V_0^2 \\cos^2\\theta_0} \\right) x^2',
+          'y = x \\tan\\theta_0 - \\left( \\frac{g}{2 v_0^2 \\cos^2\\theta_0} \\right) x^2',
+          'H = \\frac{v_0^2 \\sin^2\\theta_0}{2g}, \\quad T = \\frac{2 v_0 \\sin\\theta_0}{g}, \\quad R = \\frac{v_0^2 \\sin 2\\theta_0}{g}',
         ],
         suggestedFollowUp: [
-          'Why does maximum range occur at 45 degrees?',
-          'Show me the Cumilla Board 2017 goalkeeper question',
+          'Prove R = 4 * sqrt(H1 * H2) for complementary angles',
+          'How to check if a ball clears a wall 85m away?',
         ],
+        source: 'Offline Socratic Engine',
       };
-    } else if (p.includes('action') || p.includes('reaction') || p.includes('cancel') || p.includes('ক্রিয়া') || p.includes('প্রতিক্রিয়া')) {
+    } else if (p.includes('circular') || p.includes('কৌণিক') || p.includes('বৃত্তীয়')) {
       return {
         role: 'assistant',
-        text: `Here is the #1 misconception in HSC mechanics: Why do Action and Reaction NOT cancel each other out?\n\nKey Rule: Two forces can ONLY cancel each other if they act on the EXACT SAME OBJECT!\n\nFor example:\nWhen you jump from a boat, your feet push the boat backward (Force 1: Action acting ON the boat).\nSimultaneously, the boat pushes your body forward (Force 2: Reaction acting ON you).\n\nBecause Force 1 acts on the boat, and Force 2 acts on your feet, they NEVER cancel each other! Each individual body experiences a non-zero net force and accelerates in opposite directions: F_AB = - F_BA.`,
-        banglaText: `ক্রিয়া ও প্রতিক্রিয়া বল কেন পরস্পরকে নিষ্ক্রিয় করে না?\n\nকারণ দুটি বল তখনই একে অপরকে বাতিল করতে পারে যখন তারা একই বস্তুর উপর কাজ করে। কিন্তু নিউটনের ৩য় সূত্রে ক্রিয়া বল কাজ করে ১ম বস্তুতে এবং প্রতিক্রিয়া বল কাজ করে ২য় বস্তুতে! যেহেতু দুটি ভিন্ন বস্তুর ওপর কাজ করে, তাই তারা কখনোই পরস্পরকে নিষ্ক্রিয় করে না।`,
-        equations: ['\\vec{F}_{AB} = -\\vec{F}_{BA}'],
-        suggestedFollowUp: [
-          'How does a horse pull a cart if the cart pulls back?',
-          'What is the difference between normal force and reaction force?',
+        text: `Why is Uniform Circular Motion accelerated motion even though speed is constant?\n\n1. Velocity is a Vector:\nAcceleration is the time rate of change of VELOCITY: \\vec{a} = d\\vec{v}/dt. Velocity has two independent attributes: magnitude (speed) and direction.\n\n2. Continuous Direction Change:\nIn circular motion, the speed |v| may stay constant, but the direction of velocity changes continuously at every point along the circular arc.\n\n3. Inward Centripetal Acceleration:\nTo continuously bend a straight velocity vector into a curved circle, an inward acceleration directed toward the center is required:\na_c = v² / r = ω² r.\n\nKey Relationship: Linear speed v = ω r, where angular velocity ω = 2π/T = 2πf.`,
+        banglaText: `সুষম বৃত্তীয় গতিতে দ্রুতি ধ্রুব হলেও কেন ত্বরণ থাকে?\nবেগ একটি ভেক্টর রাশি যার মান ও দিক উভয়ই আছে। বৃত্তাকার পথে ঘুরলে প্রতি মুহূর্তে বেগের দিক পরিবর্তিত হয়। এই দিক পরিবর্তনের জন্যই সর্বদা কেন্দ্রের দিকে কেন্দ্রমুখী ত্বরণ a_c = v²/r বা ω²r সৃষ্টি হয়।`,
+        equations: [
+          'v = \\omega r, \\quad \\omega = \\frac{2\\pi}{T} = 2\\pi f',
+          'a_c = \\frac{v^2}{r} = \\omega^2 r',
         ],
+        suggestedFollowUp: [
+          'What is the angular speed of a clock second hand?',
+          'What is the difference between centripetal and centrifugal force?',
+        ],
+        source: 'Offline Socratic Engine',
       };
-    } else if (p.includes('circular') || p.includes('কৌণিক') || p.includes('বৃত্তীয়')) {
+    } else if (p.includes('graph') || p.includes('slope') || p.includes('area') || p.includes('লেখচিত্র')) {
       return {
         role: 'assistant',
-        text: `Why is circular motion at constant speed still accelerated motion?\n\nAcceleration is the rate of change of VELOCITY. Remember: velocity is a vector possessing both speed (magnitude) and direction!\n\nWhen a car circles a roundabout at a constant 30 km/h, its speed doesn\'t change, but its direction changes every single millisecond. To bend a straight path into a circle, you must continuously pull the object inward toward the center!\n\nThis inward radial acceleration is Centripetal Acceleration:\na_c = v² / r = ω² r directed toward the center.`,
-        banglaText: `সুষম বৃত্তীয় গতিতে দ্রুতি ধ্রুব হলেও কেন ত্বরণ থাকে?\n\nত্বরণ হলো বেগের পরিবর্তনের হার। বেগ একটি ভেক্টর রাশি—এর মান ও দিক উভয়ই আছে। বৃত্তাকার পথে দ্রুতি এক থাকলেও প্রতি মুহূর্তে বেগের দিক বদলে যায়। এই দিক পরিবর্তনের জন্যই সর্বদা কেন্দ্রের দিকে কেন্দ্রমুখী ত্বরণ a_c = v²/r সৃষ্টি হয়।`,
-        equations: ['a_c = \\frac{v^2}{r} = \\omega^2 r'],
-        suggestedFollowUp: [
-          'What is the angular speed of a wall clock hour hand?',
-          'Derive v = omega * r',
+        text: `Here is the master key to Kinematic Graphs (s-t, v-t, a-t):\n\n1. Slope (Derivative):\n• Slope of s-t graph (ds/dt) = Instantaneous Velocity v.\n• Slope of v-t graph (dv/dt) = Instantaneous Acceleration a.\n\n2. Area (Integral):\n• Area under v-t graph (∫ v dt) = Displacement s.\n• Area under a-t graph (∫ a dt) = Change in Velocity Δv = v - u.\n\nExaminer Trap: If the v-t graph dips below the time axis (negative velocity), the area under the axis represents negative displacement (moving backward). To find TOTAL DISTANCE, add the absolute values of the areas!`,
+        banglaText: `গতির লেখচিত্রের সারসংক্ষেপ:\n১. s-t লেখচিত্রের ঢাল = বেগ v\n২. v-t লেখচিত্রের ঢাল = ত্বরণ a\n৩. v-t লেখচিত্রের ক্ষেত্রফল = সরণ s\n৪. a-t লেখচিত্রের ক্ষেত্রফল = বেগের পরিবর্তন Δv`,
+        equations: [
+          'v = \\frac{ds}{dt}, \\quad a = \\frac{dv}{dt}, \\quad s = \\int v dt',
         ],
+        suggestedFollowUp: [
+          'How to find distance from a trapezoid v-t graph?',
+          'Explain projectile motion',
+        ],
+        source: 'Offline Socratic Engine',
       };
     } else {
       return {
         role: 'assistant',
-        text: `That is an interesting topic in dynamics! Let's break it down into core principles:\n\n1. What reference frame are you observing the motion from?\n2. Are external forces acting, or is the system isolated?\n3. If acceleration is constant, apply the kinematic formulas (v = u + at, s = ut + 0.5at²).\n4. If forces are involved, set up a Free-Body Diagram and write F_net = ma.\n\nAsk me specifically about Projectiles, Newton's Laws, Galileo's Laws, Motion Graphs, or Board Questions!`,
-        banglaText: `গতিবিদ্যার যেকোনো সমস্যা সমাধানের ধাপ:\n১. প্রসঙ্গ কাঠামো নির্ধারণ করো।\n২. ত্বরণ ধ্রুব হলে গতির সমীকরণ প্রয়োগ করো।\n৩. বল জড়িত থাকলে F = ma এবং FBD ব্যবহার করো।`,
+        text: `That is an interesting topic in dynamics! Let's approach it systematically:\n\n1. Reference Frame: What observer are we measuring from? Are we in an inertial frame?\n2. Kinematics: Is acceleration constant? If so, apply the 4 rectilinear equations (v = u + at, s = ut + 0.5at², v² = u² + 2as).\n3. 2D Vectors: For projectiles or river boats, resolve into independent x and y components.\n4. Forces & Momentum: If mass and forces are involved, set up a Free-Body Diagram and apply F_net = ma or momentum conservation.\n\nAsk me specifically about: Projectiles (প্রাস), River-Boat Crossing, Rain-Umbrella Angle, Free Fall, Motion Graphs, or Board Creative Questions!`,
+        banglaText: `গতিবিদ্যার যেকোনো সমস্যা সমাধানের ধাপ:\n১. প্রসঙ্গ কাঠামো ও অক্ষ চিহ্নিত করো।\n২. ত্বরণ ধ্রুব হলে গতির সমীকরণ প্রয়োগ করো।\n৩. নদী-নৌকা বা প্রাসের ক্ষেত্রে ভেক্টর বিভাজন (x ও y) ব্যবহার করো।`,
         suggestedFollowUp: [
-          'Explain projectile motion',
-          'How does friction work on an inclined plane?',
+          'Explain river boat crossing minimum time',
+          'Prove trajectory of prass is a parabola',
+          'Why do heavier objects not fall faster?',
         ],
+        source: 'Offline Socratic Engine',
       };
     }
   };
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const handleSend = async () => {
+    const trimmedInput = input.trim();
+    if (!trimmedInput) return;
 
-    const userMsg: Message = { role: 'user', text: input };
+    const userMsg: Message = { role: 'user', text: trimmedInput };
     setMessages((prev) => [...prev, userMsg]);
     setInput('');
     setIsTyping(true);
 
+    try {
+      // Attempt to call Cloudflare Pages Functions server endpoint /api/tutor
+      const response = await fetch('/api/tutor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: trimmedInput,
+          preferBangla,
+          history: messages.slice(-4).map((m) => ({ role: m.role, text: m.text })),
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.liveAI && data.text) {
+          setActiveEngine('Live AI (Gemini)');
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: 'assistant',
+              text: data.text,
+              source: 'Live AI (Gemini)',
+              suggestedFollowUp: [
+                'Can you explain this with a practical everyday example?',
+                'What is the standard board exam question on this?',
+              ],
+            },
+          ]);
+          setIsTyping(false);
+          return;
+        }
+      }
+    } catch {
+      // In local static mode or network failure, gracefully fall back
+    }
+
+    // Fallback to deterministic curated Socratic engine
+    setActiveEngine('Offline Socratic Engine');
     setTimeout(() => {
-      const botResponse = generateResponse(userMsg.text);
-      setMessages((prev) => [...prev, botResponse]);
+      const fallbackMsg = generateOfflineResponse(trimmedInput);
+      setMessages((prev) => [...prev, fallbackMsg]);
       setIsTyping(false);
-    }, 600);
+    }, 450);
   };
 
   return (
-    <div className="bg-sand-surface rounded-2xl border border-sand-border shadow-sm flex flex-col h-[650px] overflow-hidden">
+    <div className="bg-sand-surface rounded-2xl border border-sand-border shadow-sm flex flex-col h-[680px] overflow-hidden">
       {/* Header */}
       <div className="p-4 bg-maroon-pale border-b border-maroon-light flex items-center justify-between">
         <div className="flex items-center gap-2.5">
@@ -118,14 +213,27 @@ export default function AITutorChat() {
             <Sparkles size={18} />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-maroon-deep flex items-center gap-2">
-              HSC Dynamics AI Physics Tutor
-              <span className="text-[10px] bg-forest-pale text-forest px-1.5 py-0.5 rounded font-mono font-semibold border border-forest-light">
-                Class XI NCTB
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-bold text-maroon-deep">
+                HSC Dynamics AI Physics Tutor
+              </h3>
+              <span
+                className={`text-[10px] px-2 py-0.5 rounded font-mono font-semibold border flex items-center gap-1 ${
+                  activeEngine === 'Live AI (Gemini)'
+                    ? 'bg-forest-pale text-forest-deep border-forest-light'
+                    : 'bg-orange-pale text-orange-deep border-orange-light'
+                }`}
+              >
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    activeEngine === 'Live AI (Gemini)' ? 'bg-forest animate-pulse' : 'bg-orange'
+                  }`}
+                />
+                <span>{activeEngine}</span>
               </span>
-            </h3>
+            </div>
             <p className="text-[11px] text-maroon">
-              Trained on Shahjahan Tapan textbook &amp; 10-year board questions
+              Trained on NCTB Chapter 3 (Shahjahan Tapan &amp; Ishak Sir)
             </p>
           </div>
         </div>
@@ -158,17 +266,25 @@ export default function AITutorChat() {
               </div>
 
               <div
-                className={`max-w-[85%] sm:max-w-[75%] rounded-2xl p-4 leading-relaxed whitespace-pre-line ${
+                className={`max-w-[85%] sm:max-w-[78%] rounded-2xl p-4 leading-relaxed whitespace-pre-line ${
                   isUser
                     ? 'bg-orange text-white rounded-tr-xs shadow-xs'
                     : 'bg-sand-muted border border-sand-border text-sand-text rounded-tl-xs shadow-2xs'
                 }`}
               >
+                {/* Source Badge on Assistant Messages */}
+                {!isUser && msg.source && (
+                  <div className="mb-2 flex items-center gap-1.5 text-[10px] text-sand-subtext font-semibold">
+                    <ShieldCheck size={11} className="text-forest" />
+                    <span>{msg.source}</span>
+                  </div>
+                )}
+
                 <p>{preferBangla && msg.banglaText ? msg.banglaText : msg.text}</p>
 
                 {/* Display LaTeX equations if present */}
                 {msg.equations && (
-                  <div className="my-2.5 p-2 rounded-lg bg-sand-surface border border-sand-border font-mono font-bold text-orange-deep text-[11px]">
+                  <div className="my-2.5 p-2 rounded-lg bg-sand-surface border border-sand-border font-mono font-bold text-orange-deep text-[11px] overflow-x-auto">
                     {msg.equations.map((eq, i) => (
                       <div key={i}>{eq}</div>
                     ))}
@@ -201,7 +317,8 @@ export default function AITutorChat() {
             <div className="w-7 h-7 rounded-lg bg-maroon text-white flex items-center justify-center shrink-0">
               <Bot size={14} />
             </div>
-            <div className="bg-sand-muted p-3 rounded-2xl rounded-tl-xs flex items-center gap-1.5">
+            <div className="bg-sand-muted p-3 rounded-2xl rounded-tl-xs flex items-center gap-1.5 border border-sand-border">
+              <span className="text-[11px] text-sand-subtext mr-1">Thinking...</span>
               <div className="w-1.5 h-1.5 rounded-full bg-orange animate-bounce" />
               <div className="w-1.5 h-1.5 rounded-full bg-orange animate-bounce [animation-delay:0.2s]" />
               <div className="w-1.5 h-1.5 rounded-full bg-orange animate-bounce [animation-delay:0.4s]" />
@@ -223,12 +340,13 @@ export default function AITutorChat() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask anything (e.g., 'Why does a ball curve?', 'Prove trajectory parabola')..."
-            className="flex-1 bg-sand-muted border border-sand-border rounded-xl px-4 py-2.5 text-xs text-sand-text focus:outline-hidden focus:border-orange"
+            placeholder="Ask anything (e.g. 'Prove parabola', 'River boat minimum time', 'Rain umbrella angle')..."
+            className="flex-1 bg-sand-muted border border-sand-border rounded-xl px-4 py-2.5 text-xs text-sand-text focus:outline-hidden focus:border-orange placeholder-sand-subtext"
           />
           <button
             type="submit"
-            className="p-2.5 rounded-xl bg-orange hover:bg-orange-deep text-white shadow-sm transition-colors"
+            disabled={!input.trim() || isTyping}
+            className="p-2.5 rounded-xl bg-orange hover:bg-orange-deep text-white shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send size={15} />
           </button>

@@ -73,9 +73,11 @@ export default function Footer() {
             </h4>
             <div className="grid grid-cols-2 gap-1 text-xs text-sand-subtext">
               <Link href="/lessons" className="hover:text-orange-deep">Lessons</Link>
+              <Link href="/one-shot-class" className="hover:text-orange-deep font-semibold text-orange-deep">One-Shot Class</Link>
               <Link href="/lab" className="hover:text-orange-deep">Physics Lab</Link>
               <Link href="/formulas" className="hover:text-orange-deep">Formulas</Link>
               <Link href="/questions" className="hover:text-orange-deep">Board Archive</Link>
+              <Link href="/glossary" className="hover:text-orange-deep">Glossary</Link>
               <Link href="/cq-solver" className="hover:text-orange-deep">CQ Solver</Link>
               <Link href="/quiz" className="hover:text-orange-deep">Quiz Engine</Link>
               <Link href="/tutor" className="hover:text-orange-deep">AI Tutor</Link>

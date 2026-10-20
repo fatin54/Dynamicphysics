@@ -9,6 +9,11 @@ export interface TerminologyItem {
   context: string;
   relatedEquation?: string;
   category: 'kinematics' | 'projectile' | 'circular' | 'forces' | 'calculus';
+  symbol?: string;
+  siUnit?: string;
+  commonMistranslations?: string[];
+  relatedConcepts?: string[];
+  sourceReference?: string;
 }
 
 export interface CurriculumTopic {

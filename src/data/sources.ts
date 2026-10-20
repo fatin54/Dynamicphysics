@@ -1,12 +1,13 @@
 export interface SourceEntry {
-  category: 'Textbook' | 'Curriculum' | 'Board Examination' | 'Admission Authority';
+  category: 'Textbook' | 'Curriculum' | 'Board Examination' | 'Admission Authority' | 'Pedagogical Lecture';
   title: string;
   authorsOrAuthority: string;
   publicationOrYear: string;
-  verificationStatus: 'Verified Physically Present in Local Workspace' | 'Verified Official Document' | 'Verified Board Archive';
+  verificationStatus: 'Verified Physically Present in Local Workspace' | 'Verified Official Document' | 'Verified Board Archive' | 'Verified Online Video Lecture';
   details: string;
   pagesOrCoverage: string;
   copyrightNotice: string;
+  url?: string;
 }
 
 export const SOURCE_REGISTER: SourceEntry[] = [
@@ -49,6 +50,17 @@ export const SOURCE_REGISTER: SourceEntry[] = [
     details: 'Official HSC examinations covering all 9 general boards and combined unified question papers (e.g. 2018 unified sets). Reconstructed and translated into English with original Bangla wording preserved.',
     pagesOrCoverage: '10 completed exam cycles covering Creative Questions (CQ) and Multiple Choice Questions (MCQ).',
     copyrightNotice: 'Questions independently solved, translated, and structured for student educational preparation.',
+  },
+  {
+    category: 'Pedagogical Lecture',
+    title: '১ ক্লাসেই গতিবিদ্যা ১০০% কমপ্লিট | HSC Physics 1st Paper | Chap 03 | Dynamics One Shot Class',
+    authorsOrAuthority: 'LOBDHI (YouTube Educational Channel)',
+    publicationOrYear: 'YouTube Lecture (Video ID: 9oxhLHSATYM)',
+    verificationStatus: 'Verified Online Video Lecture',
+    details: 'Comprehensive 3-hour 56-minute marathon one-shot lecture covering the entire Bangladesh HSC Physics 1st Paper Chapter 3: Dynamics (গতিবিদ্যা). Provides visual derivations, exam shortcut algorithms (e.g. wall obstacle clearance, relative velocity river crossing, and complementary angle projectile range), and board question breakdown.',
+    pagesOrCoverage: 'Complete Chapter 3: Reference frames, 4 equations of motion, graph area/slope analysis, free fall, projectile trajectories, relative velocity, and circular motion.',
+    copyrightNotice: 'Referenced as a primary pedagogical lecture source for timestamped topic mapping and visual problem-solving sequence. Educational notes and explanations on this website are independently synthesized.',
+    url: 'https://www.youtube.com/watch?v=9oxhLHSATYM',
   },
   {
     category: 'Admission Authority',

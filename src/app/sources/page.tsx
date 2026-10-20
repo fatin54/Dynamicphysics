@@ -112,9 +112,21 @@ export default function SourcesPage() {
                 {entry.details}
               </div>
 
-              <div className="flex items-center justify-between text-[11px] text-sand-subtext pt-1">
+              <div className="flex flex-wrap items-center justify-between text-[11px] text-sand-subtext pt-1 gap-2">
                 <span><strong>Coverage:</strong> {entry.pagesOrCoverage}</span>
-                <span className="italic">{entry.copyrightNotice}</span>
+                <div className="flex items-center gap-3">
+                  <span className="italic">{entry.copyrightNotice}</span>
+                  {entry.url && (
+                    <a
+                      href={entry.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-2 py-0.5 rounded bg-orange-pale text-orange-deep font-bold hover:bg-orange hover:text-white transition-colors"
+                    >
+                      Watch Lecture ↗
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           ))}

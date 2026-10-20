@@ -13,6 +13,8 @@ import {
   CheckCircle2,
   Award,
   Zap,
+  Play,
+  Languages,
 } from 'lucide-react';
 import ProjectileLab from '@/components/simulations/ProjectileLab';
 
@@ -147,6 +149,63 @@ export default function HomePage() {
             <div className="text-[11px] text-forest font-semibold flex items-center gap-1 pt-2 border-t border-sand-border">
               <CheckCircle2 size={13} />
               <span>Examiner rubrics &amp; model answers</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured: One-Shot Class & Controlled Glossary Spotlight */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Card 1: One-Shot Video Class */}
+          <div className="p-7 rounded-3xl bg-gradient-to-br from-maroon-pale to-sand-surface border-2 border-maroon-light shadow-sm flex flex-col justify-between space-y-4">
+            <div className="space-y-3">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-maroon text-white text-[11px] font-bold">
+                <Play size={12} className="fill-white" />
+                <span>Primary Video Lecture: LOBDHI (3h 56m)</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl font-black text-maroon-deep">
+                Learn from the Dynamics One-Shot Class
+              </h3>
+              <p className="text-xs text-sand-subtext leading-relaxed">
+                Study alongside the famous marathon class with an interactive timestamp index, concise English concept notes, formula cheat-sheets, and video shortcut breakdowns (e.g. wall obstacle quadratic formula, river crossing minimum drift).
+              </p>
+            </div>
+
+            <div className="pt-2">
+              <Link
+                href="/one-shot-class"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-maroon hover:bg-maroon-deep text-white font-bold text-xs shadow-xs transition-colors"
+              >
+                <span>Open One-Shot Class Hub</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+
+          {/* Card 2: Controlled Bilingual Glossary */}
+          <div className="p-7 rounded-3xl bg-gradient-to-br from-orange-pale/40 to-sand-surface border-2 border-orange-light shadow-sm flex flex-col justify-between space-y-4">
+            <div className="space-y-3">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange text-white text-[11px] font-bold">
+                <Languages size={13} />
+                <span>Controlled Technical Dictionary</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl font-black text-maroon-deep">
+                Bilingual Dynamics Terminology &amp; Translation Traps
+              </h3>
+              <p className="text-xs text-sand-subtext leading-relaxed">
+                Avoid confusing velocity (বেগ) with speed (দ্রুতি), displacement (সরণ) with distance (দূরত্ব), and impulsive force (ঘাত বল) with impulse (বলের ঘাত). Includes symbols, SI units, and NCTB textbook citations.
+              </p>
+            </div>
+
+            <div className="pt-2">
+              <Link
+                href="/glossary"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange hover:bg-orange-deep text-white font-bold text-xs shadow-xs transition-colors"
+              >
+                <span>Explore Glossary &amp; Traps</span>
+                <ArrowRight size={14} />
+              </Link>
             </div>
           </div>
         </div>
