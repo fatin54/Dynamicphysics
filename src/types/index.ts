@@ -157,7 +157,15 @@ export type BoardName =
   | 'Mymensingh'
   | 'Combined Board'
   | 'Madrasah Board'
-  | 'BUET Admission Test';
+  | 'BUET Admission Test'
+  | 'Ishak Sir Benchmark'
+  | 'Curriculum Practice';
+
+export type QuestionSourceCategory =
+  | 'Official Board Exam'
+  | 'Ishak Sir Textbook Reference'
+  | 'Independently Written Practice'
+  | 'Admission & Top College';
 
 export interface BoardQuestion {
   id: string;
@@ -185,8 +193,15 @@ export interface BoardQuestion {
   finalAnswerBn: string;
   examinerMarkingTips: string;
   commonMistakes: string;
-  verificationStatus: 'Verified Official Board Paper' | 'Verified Textbook Exercise' | 'Admission Standard Model';
+  verificationStatus:
+    | 'Verified Official Board Paper'
+    | 'Verified Textbook Exercise'
+    | 'Admission Standard Model'
+    | 'Independently Written Practice'
+    | 'Textbook Concept Reference (Prof. Md. Ishaque)';
   sourceReference: string;
+  sourceCategory?: QuestionSourceCategory;
+  authorReference?: string;
 }
 
 export interface CreativeQuestionItem {

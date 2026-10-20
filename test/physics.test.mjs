@@ -245,4 +245,85 @@ console.log('\n--- 6. Testing Uniform Circular Motion & Centripetal Acceleration
   console.log('✓ Circular Motion relationships passed.');
 }
 
+// -------------------------------------------------------------
+// 7. Testing Ishak Sir Dynamics Curriculum Benchmarks
+// -------------------------------------------------------------
+console.log('\n--- 7. Testing Ishak Sir Dynamics Curriculum Benchmarks ---');
+
+{
+  // Test 7.1: Rain and Umbrella Relative Velocity
+  // Cyclist v_c = 5 m/s East, Rain vertical = 5√3 m/s, Wind = 2 m/s East
+  const v_cx = 5.0;
+  const v_rx = 2.0;
+  const v_ry = -5.0 * Math.sqrt(3);
+  const v_rel_x = v_rx - v_cx; // -3.0 m/s
+  const v_rel_y = v_ry; // -8.660 m/s
+  const v_rel_mag = Math.sqrt(v_rel_x * v_rel_x + v_rel_y * v_rel_y); // √84 ≈ 9.165 m/s
+  const tan_theta = Math.abs(v_rel_x) / Math.abs(v_rel_y); // 3 / (5√3) ≈ 0.34641
+  const theta_deg = (Math.atan(tan_theta) * 180) / Math.PI; // 19.1066°
+  approxEqual(v_rel_mag, 9.165, 0.01, 'Ishak Sir Rain-Cyclist Relative Speed');
+  approxEqual(theta_deg, 19.11, 0.02, 'Ishak Sir Umbrella Tilt Angle');
+
+  // Test 7.2: Horizontal Projectile Drop from Altitude (Airplane Relief)
+  // h = 490 m, u = 75 m/s
+  const h_drop = 490;
+  const u_plane = 75;
+  const t_fall = Math.sqrt((2 * h_drop) / g); // √(980 / 9.8) = 10.0 s
+  const x_lead = u_plane * t_fall; // 750 m
+  const v_impact = Math.sqrt(u_plane * u_plane + Math.pow(g * t_fall, 2)); // √(75² + 98²) = 123.41 m/s
+  approxEqual(t_fall, 10.0, EPSILON, 'Aircraft Package Fall Time');
+  approxEqual(x_lead, 750.0, EPSILON, 'Aircraft Package Release Distance');
+  approxEqual(v_impact, 123.41, 0.02, 'Aircraft Package Impact Speed');
+
+  // Test 7.3: Range = Height condition
+  // R = H => tan θ = 4
+  const theta_R_equals_H = (Math.atan(4) * 180) / Math.PI; // 75.9637°
+  approxEqual(theta_R_equals_H, 75.96, 0.01, 'R = H Angle tan(θ) = 4');
+
+  // Test 7.4: Complementary Angles Height Product Theorem: R = 4√(H1 H2)
+  // For H1 = 20 m, H2 = 45 m => R = 4 * 30 = 120 m
+  const H1 = 20;
+  const H2 = 45;
+  const R_product = 4 * Math.sqrt(H1 * H2);
+  approxEqual(R_product, 120.0, EPSILON, 'Complementary Heights Theorem R = 4√(H1 H2)');
+
+  // Test 7.5: Ascending Balloon Stone Drop
+  // Balloon ascending at 12 m/s, drops stone from 65 m: 4.9 t² - 12 t - 65 = 0
+  const a_quad = 4.9;
+  const b_quad = -12;
+  const c_quad = -65;
+  const disc = Math.sqrt(b_quad * b_quad - 4 * a_quad * c_quad);
+  const t_balloon = (-b_quad + disc) / (2 * a_quad); // (12 + 37.656) / 9.8 = 5.067 s
+  const v_balloon_impact = Math.sqrt(12 * 12 + 2 * g * 65); // 37.656 m/s
+  approxEqual(t_balloon, 5.07, 0.01, 'Ascending Balloon Drop Time');
+  approxEqual(v_balloon_impact, 37.66, 0.02, 'Ascending Balloon Impact Speed');
+
+  // Test 7.6: Calculus Motion when a(t) = 0
+  // x(t) = 2t³ - 9t² + 12t + 4 => v(t) = 6t² - 18t + 12 => a(t) = 12t - 18
+  const t_zero_accel = 18 / 12; // 1.5 s
+  const v_at_zero_accel = 6 * Math.pow(t_zero_accel, 2) - 18 * t_zero_accel + 12; // -1.5 m/s
+  const x_at_zero_accel = 2 * Math.pow(t_zero_accel, 3) - 9 * Math.pow(t_zero_accel, 2) + 12 * t_zero_accel + 4; // 8.5 m
+  approxEqual(t_zero_accel, 1.5, EPSILON, 'Calculus Time for Zero Acceleration');
+  approxEqual(v_at_zero_accel, -1.5, EPSILON, 'Calculus Velocity at Zero Acceleration');
+  approxEqual(x_at_zero_accel, 8.5, EPSILON, 'Calculus Position at Zero Acceleration');
+
+  // Test 7.7: Earth Equator Centripetal Acceleration
+  const R_earth = 6.4e6;
+  const omega_earth = (2 * Math.PI) / 86400; // 7.2722e-5
+  const a_c_earth = Math.pow(omega_earth, 2) * R_earth;
+  approxEqual(a_c_earth, 0.0338, 0.0005, 'Equatorial Centripetal Acceleration');
+
+  // Test 7.8: Tri-Phase Metro Train Motion
+  // alpha = 1.2 m/s², beta = 1.8 m/s², total time = 60 s
+  const alpha = 1.2;
+  const beta = 1.8;
+  const total_t = 60;
+  const v_max_metro = ((alpha * beta) / (alpha + beta)) * total_t; // 43.2 m/s
+  const dist_metro = 0.5 * total_t * v_max_metro; // 1296 m
+  approxEqual(v_max_metro, 43.2, EPSILON, 'Tri-Phase Maximum Speed');
+  approxEqual(dist_metro, 1296.0, EPSILON, 'Tri-Phase Total Distance');
+
+  console.log('✓ All Ishak Sir Benchmark calculations verified.');
+}
+
 console.log('\n🎉 ALL MATHEMATICAL PHYSICS UNIT TESTS PASSED SUCCESSFULLY! 🌟\n');

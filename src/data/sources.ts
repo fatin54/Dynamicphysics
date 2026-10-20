@@ -21,6 +21,16 @@ export const SOURCE_REGISTER: SourceEntry[] = [
     copyrightNotice: 'Used as official pedagogical and syllabus reference for non-commercial educational curriculum alignment under fair educational principles.',
   },
   {
+    category: 'Textbook',
+    title: 'উচ্চ মাধ্যমিক পদার্থবিজ্ঞান ১ম পত্র (Higher Secondary Physics 1st Paper)',
+    authorsOrAuthority: 'প্রফেসর ড. মোহাম্মদ ইসহাক ও প্রফেসর মো. আমির হোসেন খান (সহযোগিতায়: ড. মো. নজরুল ইসলাম)',
+    publicationOrYear: 'আইডিয়াল বুকস (Ideal Books, Dhaka) / NCTB অনুমোদিত সংস্করণ',
+    verificationStatus: 'Verified Official Document',
+    details: 'Secondary pedagogical reference and problem benchmark. Chapter 3 (গতিবিদ্যা) conceptual frameworks including relative velocity (rain and umbrella problems, bus window wetting), projectile range-height identities (R = 4H cot θ, R = 4√(H1 H2)), horizontal projectile release from altitude, balloon drop kinematics, and multi-stage rectilinear acceleration. All practice questions are independently formulated, re-engineered with original numerical values, and recalculated to respect copyright requirements.',
+    pagesOrCoverage: 'Chapter 3: গতিবিদ্যা (Dynamics) — Relative velocity, projectile kinematics, calculus in motion, and circular motion exercises.',
+    copyrightNotice: 'Referenced as an academic benchmark under fair educational use principles. Questions in the bank are independently written and calculated.',
+  },
+  {
     category: 'Curriculum',
     title: 'National Curriculum & Syllabus: Class XI-XII Physics 1st Paper',
     authorsOrAuthority: 'National Curriculum and Textbook Board (NCTB), Bangladesh',
