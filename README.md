@@ -256,4 +256,24 @@ hsc-prep/
 - **Core Textbook:** *উচ্চ মাধ্যমিক পদার্থবিজ্ঞান ১ম পত্র* — ড. শাহজাহান তপন, মুহাম্মদ আজিজ হাসান, ড. রানা চৌধুরী।
 - **Board Papers:** Board of Intermediate and Secondary Education, Dhaka, Rajshahi, Cumilla, Jashore, Chattogram, Barishal, Sylhet, Dinajpur, Mymensingh.
 
+---
+
+## ⚡ 10. Cloudflare Deployment Architecture
+
+DynamicsLab is architected to deploy on Cloudflare with zero runtime friction:
+
+### Dual-Compatible Cloudflare Setup
+1. **Cloudflare Pages Workflow:**
+   - **Build Command:** `npm run build`
+   - **Build Output Directory:** `out`
+   - **Root Directory:** `/`
+   - **Serverless API:** Automatically deploys `functions/api/tutor.ts`
+   - **Custom Headers:** Automatically applies `public/_headers` (cached static assets, security headers)
+2. **Cloudflare Workers with Static Assets Workflow (`wrangler.jsonc`):**
+   - **Config:** `wrangler.jsonc` (`assets: { directory: "./out", binding: "ASSETS" }`)
+   - **Worker Entry:** `src/worker.ts` handles `/api/tutor` and routes web traffic to `env.ASSETS`
+   - **Deploy Command:** `npx wrangler deploy`
+
+> **Note on Build Retries:** If an initial build was triggered via a temporary Cloudflare template (`seed_repo` override), Cloudflare prohibits retrying that specific historic run. Fresh deployments must be initiated via Git push to `main` or by triggering a new deployment from the project's **Deployments** tab.
+
 *Built with precision for the future physicists and engineers of Bangladesh.* 🇧🇩
