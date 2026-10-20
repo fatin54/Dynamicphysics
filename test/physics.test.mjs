@@ -5,6 +5,7 @@
  */
 
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 
 console.log('🧪 Starting HSC Dynamics Lab Mathematical Unit Tests...\n');
 
@@ -528,6 +529,98 @@ console.log('\n--- 11. Testing Chapter 2 Type 3: Vector Calculus ---');
   approxEqual(curl_z, 0, EPSILON, 'Curl z-component is zero');
 
   console.log('✓ Chapter 2 Type 3: Vector Calculus (Grad, Div, Curl) tests passed.');
+}
+
+// -------------------------------------------------------------
+// 12. Testing Canonical CQ Subparts & Historical Import Integrity
+// -------------------------------------------------------------
+console.log('\n--- 12. Testing Canonical CQ Subpart Utilities & Dataset Integrity ---');
+
+{
+  // Test 12.1: Normalization of all variant Bengali and English identifiers
+  const { normalizeCQSubpart, getCQSubpartMarks, compareCQSubparts, groupQuestionsByParentCq } = await import('./cqSubparts.mjs');
+
+  assert.equal(normalizeCQSubpart('ka'), 'ka', 'ka normalization');
+  assert.equal(normalizeCQSubpart('ক'), 'ka', 'Bengali ক normalization');
+  assert.equal(normalizeCQSubpart('CQ_Ka'), 'ka', 'CQ_Ka normalization');
+  assert.equal(normalizeCQSubpart('(ক)'), 'ka', '(ক) normalization');
+
+  assert.equal(normalizeCQSubpart('kha'), 'kha', 'kha normalization');
+  assert.equal(normalizeCQSubpart('খ'), 'kha', 'Bengali খ normalization');
+  assert.equal(normalizeCQSubpart('CQ_Kha'), 'kha', 'CQ_Kha normalization');
+
+  assert.equal(normalizeCQSubpart('ga'), 'ga', 'ga normalization');
+  assert.equal(normalizeCQSubpart('গ'), 'ga', 'Bengali গ normalization');
+  assert.equal(normalizeCQSubpart('CQ_Ga'), 'ga', 'CQ_Ga normalization');
+
+  assert.equal(normalizeCQSubpart('gha'), 'gha', 'gha normalization');
+  assert.equal(normalizeCQSubpart('ঘ'), 'gha', 'Bengali ঘ normalization');
+  assert.equal(normalizeCQSubpart('CQ_Gha'), 'gha', 'CQ_Gha normalization');
+
+  // Test 12.2: Standard NCTB Marks Weighting
+  assert.equal(getCQSubpartMarks('ka'), 1, 'Ka is 1 mark');
+  assert.equal(getCQSubpartMarks('kha'), 2, 'Kha is 2 marks');
+  assert.equal(getCQSubpartMarks('ga'), 3, 'Ga is 3 marks');
+  assert.equal(getCQSubpartMarks('gha'), 4, 'Gha is 4 marks');
+
+  // Test 12.3: Sorting comparison
+  assert.ok(compareCQSubparts('ka', 'kha') < 0, 'ka precedes kha');
+  assert.ok(compareCQSubparts('kha', 'ga') < 0, 'kha precedes ga');
+  assert.ok(compareCQSubparts('ga', 'gha') < 0, 'ga precedes gha');
+
+  // Test 12.4: Grouping utility
+  const mockQuestions = [
+    { id: 'q3', parentCqId: 'p1', cqSubpart: 'ga', board: 'Dhaka', year: 2017, questionEn: 'c', questionBn: 'গ', marks: 3, sourceReference: 'ref' },
+    { id: 'q1', parentCqId: 'p1', cqSubpart: 'ka', board: 'Dhaka', year: 2017, questionEn: 'a', questionBn: 'ক', marks: 1, sourceReference: 'ref' },
+    { id: 'q4', parentCqId: 'p1', cqSubpart: 'gha', board: 'Dhaka', year: 2017, questionEn: 'd', questionBn: 'ঘ', marks: 4, sourceReference: 'ref' },
+    { id: 'q2', parentCqId: 'p1', cqSubpart: 'kha', board: 'Dhaka', year: 2017, questionEn: 'b', questionBn: 'খ', marks: 2, sourceReference: 'ref' },
+  ];
+  const grouped = groupQuestionsByParentCq(mockQuestions);
+  assert.equal(grouped.length, 1, 'One parent group created');
+  assert.equal(grouped[0].subparts.length, 4, 'Four subparts in group');
+  assert.deepEqual(grouped[0].subparts.map(s => s.cqSubpart), ['ka', 'kha', 'ga', 'gha'], 'Subparts strictly sorted ka -> kha -> ga -> gha');
+
+  // Test 12.5: Dataset Subpart Balance Verification from files
+  const ch3Raw = fs.readFileSync('./src/data/boardQuestions.ts', 'utf8');
+  const ch3JsonStart = ch3Raw.indexOf('[', ch3Raw.indexOf('='));
+  const ch3JsonEnd = ch3Raw.lastIndexOf(']') + 1;
+  const BOARD_QUESTIONS = JSON.parse(ch3Raw.substring(ch3JsonStart, ch3JsonEnd));
+
+  const vbqRaw = fs.readFileSync('./src/data/vectorBoardQuestions.ts', 'utf8');
+  const vbqJsonStart = vbqRaw.indexOf('[', vbqRaw.indexOf('='));
+  const vbqJsonEnd = vbqRaw.lastIndexOf(']') + 1;
+  const VECTOR_BOARD_QUESTIONS = JSON.parse(vbqRaw.substring(vbqJsonStart, vbqJsonEnd));
+
+  // Check Chapter 3 subparts
+  const ch3Ka = BOARD_QUESTIONS.filter(q => q.cqSubpart === 'ka').length;
+  const ch3Kha = BOARD_QUESTIONS.filter(q => q.cqSubpart === 'kha').length;
+  const ch3Ga = BOARD_QUESTIONS.filter(q => q.cqSubpart === 'ga').length;
+  const ch3Gha = BOARD_QUESTIONS.filter(q => q.cqSubpart === 'gha').length;
+  assert.ok(ch3Ka > 0, 'Chapter 3 has Ka subparts');
+  assert.ok(ch3Kha > 0, 'Chapter 3 has Kha subparts');
+  assert.ok(ch3Ga > 0, 'Chapter 3 has Ga subparts');
+  assert.ok(ch3Gha > 0, 'Chapter 3 has Gha subparts');
+
+  // Check Chapter 2 Vector subparts
+  const ch2Ka = VECTOR_BOARD_QUESTIONS.filter(q => q.cqSubpart === 'ka').length;
+  const ch2Kha = VECTOR_BOARD_QUESTIONS.filter(q => q.cqSubpart === 'kha').length;
+  const ch2Ga = VECTOR_BOARD_QUESTIONS.filter(q => q.cqSubpart === 'ga').length;
+  const ch2Gha = VECTOR_BOARD_QUESTIONS.filter(q => q.cqSubpart === 'gha').length;
+  assert.ok(ch2Ka > 0, 'Chapter 2 has Ka subparts');
+  assert.ok(ch2Kha > 0, 'Chapter 2 has Kha subparts');
+  assert.ok(ch2Ga > 0, 'Chapter 2 has Ga subparts');
+  assert.ok(ch2Gha > 0, 'Chapter 2 has Gha subparts');
+  assert.equal(ch2Ka, ch2Kha, 'Chapter 2 Ka and Kha are balanced');
+  assert.equal(ch2Ga, ch2Gha, 'Chapter 2 Ga and Gha are balanced');
+
+  // Check EV provenance fields
+  const evQuestions = VECTOR_BOARD_QUESTIONS.filter(q => q.languageVersion === 'English Version');
+  assert.ok(evQuestions.length >= 28, 'At least 28 English Version questions preserved');
+  for (const ev of evQuestions) {
+    assert.ok(ev.sourceReference, `EV Question ${ev.id} has sourceReference`);
+  }
+
+  console.log('✓ Canonical CQ Subparts & Historical Import Integrity tests passed.');
 }
 
 console.log('\n🎉 ALL MATHEMATICAL PHYSICS UNIT TESTS PASSED SUCCESSFULLY! 🌟\n');

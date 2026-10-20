@@ -8,6 +8,13 @@ import { VECTOR_FORMULAS } from '@/data/vectorFormulas';
 import { VECTOR_BOARD_QUESTIONS } from '@/data/vectorBoardQuestions';
 import { BoardQuestion, VectorCategory } from '@/types';
 import {
+  CanonicalCQSubpart,
+  CQ_SUBPARTS,
+  CQ_SUBPART_ORDER,
+  normalizeCQSubpart,
+  getCQSubpartLabel,
+} from '@/lib/cqSubparts';
+import {
   Compass,
   ArrowRight,
   BookOpen,
@@ -27,6 +34,7 @@ import {
   ShieldCheck,
   ChevronRight,
   Sliders,
+  ExternalLink,
 } from 'lucide-react';
 
 export default function VectorChapterPage() {
@@ -39,12 +47,22 @@ export default function VectorChapterPage() {
   const [filterBoard, setFilterBoard] = useState<string>('all');
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [filterType, setFilterType] = useState<string>('all');
+  const [filterSubpart, setFilterSubpart] = useState<string>('all');
+  const [filterLanguage, setFilterLanguage] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Expandable card states
   const [expandedHints, setExpandedHints] = useState<Record<string, boolean>>({});
   const [expandedSolutions, setExpandedSolutions] = useState<Record<string, boolean>>({});
+
+  // Subpart counts
+  const vectorKaCount = useMemo(() => VECTOR_BOARD_QUESTIONS.filter(q => (q.cqSubpart || normalizeCQSubpart(q.questionType)) === 'ka').length, []);
+  const vectorKhaCount = useMemo(() => VECTOR_BOARD_QUESTIONS.filter(q => (q.cqSubpart || normalizeCQSubpart(q.questionType)) === 'kha').length, []);
+  const vectorGaCount = useMemo(() => VECTOR_BOARD_QUESTIONS.filter(q => (q.cqSubpart || normalizeCQSubpart(q.questionType)) === 'ga').length, []);
+  const vectorGhaCount = useMemo(() => VECTOR_BOARD_QUESTIONS.filter(q => (q.cqSubpart || normalizeCQSubpart(q.questionType)) === 'gha').length, []);
+  const vectorEvCount = useMemo(() => VECTOR_BOARD_QUESTIONS.filter(q => q.languageVersion === 'English Version').length, []);
+  const vectorBvCount = useMemo(() => VECTOR_BOARD_QUESTIONS.filter(q => q.languageVersion !== 'English Version').length, []);
 
   // Interactive Calculator State: Dot/Cross Product
   const [vA, setVA] = useState({ x: 2, y: 3, z: -1 });
@@ -74,6 +92,8 @@ export default function VectorChapterPage() {
     setFilterBoard('all');
     setFilterCategory('all');
     setFilterType('all');
+    setFilterSubpart('all');
+    setFilterLanguage('all');
     setFilterStatus('all');
     setSearchQuery('');
   };
@@ -125,6 +145,14 @@ export default function VectorChapterPage() {
         if (filterType === 'CQ' && !q.questionType.startsWith('CQ')) return false;
         if (filterType === 'MCQ' && q.questionType !== 'MCQ') return false;
       }
+      if (filterSubpart !== 'all') {
+        const canonicalSubpart = q.cqSubpart || normalizeCQSubpart(q.questionType);
+        if (canonicalSubpart !== filterSubpart) return false;
+      }
+      if (filterLanguage !== 'all') {
+        if (filterLanguage === 'EV' && q.languageVersion !== 'English Version') return false;
+        if (filterLanguage === 'BV' && q.languageVersion === 'English Version') return false;
+      }
       if (filterStatus !== 'all' && q.verificationStatus !== filterStatus) return false;
       if (searchQuery.trim() !== '') {
         const query = searchQuery.toLowerCase();
@@ -136,7 +164,7 @@ export default function VectorChapterPage() {
       }
       return true;
     });
-  }, [filterYear, filterBoard, filterCategory, filterType, filterStatus, searchQuery]);
+  }, [filterYear, filterBoard, filterCategory, filterType, filterSubpart, filterLanguage, filterStatus, searchQuery]);
 
   return (
     <div className="min-h-screen bg-sand-base pb-24 text-sand-text">
@@ -725,8 +753,82 @@ export default function VectorChapterPage() {
               />
             </div>
 
+            {/* Canonical CQ Subpart Filter Bar */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[11px] font-bold text-sand-subtext uppercase tracking-wider flex items-center gap-1">
+                  <Layers size={13} className="text-orange" />
+                  <span>NCTB Subpart Filter (ক, খ, গ, ঘ):</span>
+                </span>
+                <span className="text-[10px] text-sand-subtext italic hidden sm:inline">
+                  ক (1m) • খ (2m) • গ (3m) • ঘ (4m)
+                </span>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button
+                  onClick={() => setFilterSubpart('all')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    filterSubpart === 'all'
+                      ? 'bg-maroon text-white shadow-2xs'
+                      : 'bg-sand-muted border border-sand-border text-sand-text hover:border-maroon'
+                  }`}
+                >
+                  All Subparts ({VECTOR_BOARD_QUESTIONS.length})
+                </button>
+
+                <button
+                  onClick={() => setFilterSubpart('ka')}
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    filterSubpart === 'ka'
+                      ? 'bg-sky-600 text-white shadow-2xs'
+                      : 'bg-sky-50 dark:bg-sky-950/40 text-sky-800 dark:text-sky-300 border border-sky-200 dark:border-sky-800 hover:border-sky-500'
+                  }`}
+                >
+                  <span className="w-4 h-4 rounded-full bg-white/20 text-center text-[10px] flex items-center justify-center font-black">ক</span>
+                  <span>Ka (1 Mark) ({vectorKaCount})</span>
+                </button>
+
+                <button
+                  onClick={() => setFilterSubpart('kha')}
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    filterSubpart === 'kha'
+                      ? 'bg-indigo-600 text-white shadow-2xs'
+                      : 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:border-indigo-500'
+                  }`}
+                >
+                  <span className="w-4 h-4 rounded-full bg-white/20 text-center text-[10px] flex items-center justify-center font-black">খ</span>
+                  <span>Kha (2 Marks) ({vectorKhaCount})</span>
+                </button>
+
+                <button
+                  onClick={() => setFilterSubpart('ga')}
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    filterSubpart === 'ga'
+                      ? 'bg-orange-600 text-white shadow-2xs'
+                      : 'bg-orange-pale text-orange-deep border border-orange-light hover:border-orange'
+                  }`}
+                >
+                  <span className="w-4 h-4 rounded-full bg-white/20 text-center text-[10px] flex items-center justify-center font-black">গ</span>
+                  <span>Ga (3 Marks) ({vectorGaCount})</span>
+                </button>
+
+                <button
+                  onClick={() => setFilterSubpart('gha')}
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    filterSubpart === 'gha'
+                      ? 'bg-maroon-deep text-white shadow-2xs'
+                      : 'bg-maroon-pale text-maroon-deep border border-maroon-light hover:border-maroon'
+                  }`}
+                >
+                  <span className="w-4 h-4 rounded-full bg-white/20 text-center text-[10px] flex items-center justify-center font-black">ঘ</span>
+                  <span>Gha (4 Marks) ({vectorGhaCount})</span>
+                </button>
+              </div>
+            </div>
+
             {/* Dropdown Filters (Responsive Grid) */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-6 gap-3">
               {/* Category Filter */}
               <div>
                 <label className="text-[11px] font-bold text-sand-subtext uppercase tracking-wider block mb-1">
@@ -788,8 +890,25 @@ export default function VectorChapterPage() {
                   <option value="Jashore">Jashore Board</option>
                   <option value="Sylhet">Sylhet Board</option>
                   <option value="Dinajpur">Dinajpur Board</option>
+                  <option value="Barishal">Barishal Board</option>
                   <option value="Mymensingh">Mymensingh Board</option>
                   <option value="Combined Board">Combined Board (2018)</option>
+                </select>
+              </div>
+
+              {/* Language Medium Filter */}
+              <div>
+                <label className="text-[11px] font-bold text-sand-subtext uppercase tracking-wider block mb-1">
+                  Language Medium
+                </label>
+                <select
+                  value={filterLanguage}
+                  onChange={(e) => setFilterLanguage(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded-xl border border-sand-border text-xs bg-sand-base font-semibold"
+                >
+                  <option value="all">All Mediums ({VECTOR_BOARD_QUESTIONS.length})</option>
+                  <option value="EV">English Version ({vectorEvCount})</option>
+                  <option value="BV">Bangla Version ({vectorBvCount})</option>
                 </select>
               </div>
 
@@ -804,7 +923,7 @@ export default function VectorChapterPage() {
                   className="w-full px-2.5 py-1.5 rounded-xl border border-sand-border text-xs bg-sand-base font-semibold"
                 >
                   <option value="all">All Formats</option>
-                  <option value="CQ">Creative (CQ Ga/Gha)</option>
+                  <option value="CQ">Creative (CQ)</option>
                   <option value="MCQ">MCQ Multiple Choice</option>
                 </select>
               </div>
@@ -874,19 +993,90 @@ export default function VectorChapterPage() {
                         <span className="px-2 py-0.5 rounded-md text-[11px] font-extrabold bg-maroon text-white">
                           {q.board} Board {q.year}
                         </span>
-                        <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-sand-muted text-sand-text border border-sand-border">
-                          {q.questionType} ({q.marks} Marks)
-                        </span>
+
+                        {/* Canonical CQ Subpart Badge */}
+                        {(() => {
+                          const canonicalSubpart = q.cqSubpart || normalizeCQSubpart(q.questionType);
+                          const subpartMeta = canonicalSubpart ? CQ_SUBPARTS[canonicalSubpart] : null;
+
+                          if (subpartMeta) {
+                            return (
+                              <span
+                                className={`px-2.5 py-0.5 rounded-lg font-bold text-[11px] border flex items-center gap-1.5 ${subpartMeta.badgeBg} ${subpartMeta.badgeText} ${subpartMeta.badgeBorder}`}
+                              >
+                                <span className="w-4 h-4 rounded-full bg-current/15 text-center text-[10px] flex items-center justify-center font-black">
+                                  {subpartMeta.labelBn}
+                                </span>
+                                <span>Part ({subpartMeta.labelEn})</span>
+                                <span>•</span>
+                                <span>{subpartMeta.standardMarks} Mark{subpartMeta.standardMarks > 1 ? 's' : ''}</span>
+                                <span className="hidden sm:inline font-semibold">({useBangla ? subpartMeta.titleBn : subpartMeta.titleEn})</span>
+                              </span>
+                            );
+                          }
+
+                          if (q.questionType === 'MCQ') {
+                            return (
+                              <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-forest-pale text-forest-deep border border-forest-light">
+                                MCQ (1 Mark)
+                              </span>
+                            );
+                          }
+
+                          return (
+                            <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-sand-muted text-sand-text border border-sand-border">
+                              {q.questionType} ({q.marks} Marks)
+                            </span>
+                          );
+                        })()}
+
+                        {/* Medium Badge */}
+                        {q.languageVersion && (
+                          <span
+                            className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${
+                              q.languageVersion === 'English Version'
+                                ? 'bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/40 dark:text-sky-300 dark:border-sky-800'
+                                : 'bg-sand-muted text-sand-text border-sand-border'
+                            }`}
+                          >
+                            {q.languageVersion === 'English Version' ? 'EV' : 'BV'}
+                          </span>
+                        )}
+
                         <span className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-forest-pale text-forest-deep border border-forest-light flex items-center gap-1">
                           <ShieldCheck size={12} />
                           <span>{q.verificationStatus}</span>
                         </span>
                       </div>
 
-                      <span className="text-[11px] text-sand-subtext font-mono">
-                        {q.sourceReference}
-                      </span>
+                      <div className="flex items-center gap-2 text-[11px]">
+                        <span className="text-sand-subtext font-mono">
+                          {q.sourceReference}
+                        </span>
+                        {q.sourceUrl && (
+                          <a
+                            href={q.sourceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sand-subtext hover:text-maroon flex items-center gap-0.5 font-medium ml-1"
+                            title="View official scan on board-questions.me"
+                          >
+                            <ExternalLink size={12} />
+                            <span className="hidden sm:inline">Source Scan</span>
+                          </a>
+                        )}
+                      </div>
                     </div>
+
+                    {/* Creative Question Stem Context if distinct from question */}
+                    {q.stemEn && q.stemEn !== q.questionEn && (
+                      <div className="p-3.5 rounded-xl bg-sand-muted/50 border border-sand-border/80 text-xs text-sand-text space-y-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-sand-subtext block">
+                          Creative Question Context (উদ্দীপক):
+                        </span>
+                        <p className="leading-relaxed">{useBangla ? q.stemBn || q.stemEn : q.stemEn}</p>
+                      </div>
+                    )}
 
                     {/* Question Statement */}
                     <div className="space-y-2">

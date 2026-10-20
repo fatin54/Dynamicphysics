@@ -1,6 +1,8 @@
 export type LearningLayer = 'intuitive' | 'academic' | 'exam';
 
 export type VectorCategory = 'dot-cross' | 'riverboat' | 'vector-calculus';
+export type CanonicalCQSubpart = 'ka' | 'kha' | 'ga' | 'gha';
+export type LanguageVersion = 'English Version' | 'Bangla Version';
 
 export type LessonCategory =
   | 'kinematics'
@@ -205,8 +207,17 @@ export interface BoardQuestion {
   vectorCategory?: VectorCategory;
   topicId: string;
   questionType: 'MCQ' | 'CQ_Ka' | 'CQ_Kha' | 'CQ_Ga' | 'CQ_Gha' | 'CQ_Full';
+  cqSubpart?: CanonicalCQSubpart;
+  parentCqId?: string;
+  questionNumber?: number | string;
   marks: number;
   difficulty: 'Easy' | 'Medium' | 'Hard' | 'Admission';
+  languageVersion?: LanguageVersion;
+  sourceUrl?: string;
+  sourceImages?: string[];
+  discoverySource?: string;
+  retrievalDate?: string;
+  solutionVerified?: boolean;
   questionEn: string;
   questionBn: string;
   options?: { key: string; textEn: string; textBn: string }[];

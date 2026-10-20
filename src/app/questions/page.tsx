@@ -5,6 +5,13 @@ import Link from 'next/link';
 import { BOARD_QUESTIONS } from '@/data/boardQuestions';
 import { BoardQuestion, QuestionSourceCategory } from '@/types';
 import {
+  CanonicalCQSubpart,
+  CQ_SUBPARTS,
+  CQ_SUBPART_ORDER,
+  normalizeCQSubpart,
+  getCQSubpartLabel,
+} from '@/lib/cqSubparts';
+import {
   GraduationCap,
   Search,
   Filter,
@@ -18,6 +25,8 @@ import {
   BookOpen,
   Sparkles,
   Compass,
+  ExternalLink,
+  Layers,
 } from 'lucide-react';
 
 export default function QuestionsPage() {
@@ -25,6 +34,8 @@ export default function QuestionsPage() {
   const [selectedSource, setSelectedSource] = useState<string>('all');
   const [selectedTopic, setSelectedTopic] = useState<string>('all');
   const [selectedType, setSelectedType] = useState<string>('all');
+  const [selectedSubpart, setSelectedSubpart] = useState<string>('all');
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
   const [useBangla, setUseBangla] = useState<boolean>(false);
 
@@ -73,6 +84,20 @@ export default function QuestionsPage() {
       selectedType === 'all' ||
       (selectedType === 'MCQ' ? q.questionType === 'MCQ' : q.questionType !== 'MCQ');
 
+    // Canonical Subpart filter
+    const canonicalSubpart = q.cqSubpart || normalizeCQSubpart(q.questionType);
+    const matchesSubpart =
+      selectedSubpart === 'all' ||
+      (selectedSubpart === 'mcq' && q.questionType === 'MCQ') ||
+      (selectedSubpart === 'full' && q.questionType === 'CQ_Full') ||
+      canonicalSubpart === selectedSubpart;
+
+    // Language version filter
+    const matchesLanguage =
+      selectedLanguage === 'all' ||
+      (selectedLanguage === 'EV' && q.languageVersion === 'English Version') ||
+      (selectedLanguage === 'BV' && (q.languageVersion === 'Bangla Version' || !q.languageVersion));
+
     // Difficulty filter
     const matchesDifficulty = selectedDifficulty === 'all' || q.difficulty === selectedDifficulty;
 
@@ -84,12 +109,20 @@ export default function QuestionsPage() {
       q.board.toLowerCase().includes(term) ||
       q.sourceReference.toLowerCase().includes(term);
 
-    return matchesSource && matchesTopic && matchesType && matchesDifficulty && matchesSearch;
+    return matchesSource && matchesTopic && matchesType && matchesSubpart && matchesLanguage && matchesDifficulty && matchesSearch;
   });
 
   const countBoard = BOARD_QUESTIONS.filter((q) => q.sourceCategory === 'Official Board Exam').length;
   const countIshak = BOARD_QUESTIONS.filter((q) => q.sourceCategory === 'Ishak Sir Textbook Reference' || q.sourceCategory === 'Independently Written Practice').length;
   const countAdmission = BOARD_QUESTIONS.filter((q) => q.sourceCategory === 'Admission & Top College').length;
+
+  const countKa = BOARD_QUESTIONS.filter((q) => (q.cqSubpart || normalizeCQSubpart(q.questionType)) === 'ka').length;
+  const countKha = BOARD_QUESTIONS.filter((q) => (q.cqSubpart || normalizeCQSubpart(q.questionType)) === 'kha').length;
+  const countGa = BOARD_QUESTIONS.filter((q) => (q.cqSubpart || normalizeCQSubpart(q.questionType)) === 'ga').length;
+  const countGha = BOARD_QUESTIONS.filter((q) => (q.cqSubpart || normalizeCQSubpart(q.questionType)) === 'gha').length;
+  const countMCQ = BOARD_QUESTIONS.filter((q) => q.questionType === 'MCQ').length;
+  const countEV = BOARD_QUESTIONS.filter((q) => q.languageVersion === 'English Version').length;
+  const countBV = BOARD_QUESTIONS.filter((q) => q.languageVersion !== 'English Version').length;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
@@ -198,8 +231,93 @@ export default function QuestionsPage() {
           />
         </div>
 
+        {/* Canonical CQ Subpart Filter Bar */}
+        <div>
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-[11px] font-bold text-sand-subtext uppercase tracking-wider flex items-center gap-1">
+              <Layers size={13} className="text-orange" />
+              <span>NCTB Question Subpart Filter (ক, খ, গ, ঘ):</span>
+            </span>
+            <span className="text-[10px] text-sand-subtext italic hidden sm:inline">
+              Standard NCTB marks: ক (1m), খ (2m), গ (3m), ঘ (4m)
+            </span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-1.5">
+            <button
+              onClick={() => setSelectedSubpart('all')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                selectedSubpart === 'all'
+                  ? 'bg-maroon text-white shadow-2xs'
+                  : 'bg-sand-surface border border-sand-border text-sand-text hover:border-maroon'
+              }`}
+            >
+              All Parts ({BOARD_QUESTIONS.length})
+            </button>
+
+            <button
+              onClick={() => setSelectedSubpart('ka')}
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                selectedSubpart === 'ka'
+                  ? 'bg-sky-600 text-white shadow-2xs'
+                  : 'bg-sky-50 dark:bg-sky-950/40 text-sky-800 dark:text-sky-300 border border-sky-200 dark:border-sky-800 hover:border-sky-500'
+              }`}
+            >
+              <span className="w-4 h-4 rounded-full bg-white/20 text-center text-[10px] flex items-center justify-center font-black">ক</span>
+              <span>Ka (1 Mark) ({countKa})</span>
+            </button>
+
+            <button
+              onClick={() => setSelectedSubpart('kha')}
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                selectedSubpart === 'kha'
+                  ? 'bg-indigo-600 text-white shadow-2xs'
+                  : 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:border-indigo-500'
+              }`}
+            >
+              <span className="w-4 h-4 rounded-full bg-white/20 text-center text-[10px] flex items-center justify-center font-black">খ</span>
+              <span>Kha (2 Marks) ({countKha})</span>
+            </button>
+
+            <button
+              onClick={() => setSelectedSubpart('ga')}
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                selectedSubpart === 'ga'
+                  ? 'bg-orange-600 text-white shadow-2xs'
+                  : 'bg-orange-pale text-orange-deep border border-orange-light hover:border-orange'
+              }`}
+            >
+              <span className="w-4 h-4 rounded-full bg-white/20 text-center text-[10px] flex items-center justify-center font-black">গ</span>
+              <span>Ga (3 Marks) ({countGa})</span>
+            </button>
+
+            <button
+              onClick={() => setSelectedSubpart('gha')}
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                selectedSubpart === 'gha'
+                  ? 'bg-maroon-deep text-white shadow-2xs'
+                  : 'bg-maroon-pale text-maroon-deep border border-maroon-light hover:border-maroon'
+              }`}
+            >
+              <span className="w-4 h-4 rounded-full bg-white/20 text-center text-[10px] flex items-center justify-center font-black">ঘ</span>
+              <span>Gha (4 Marks) ({countGha})</span>
+            </button>
+
+            <button
+              onClick={() => setSelectedSubpart('mcq')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                selectedSubpart === 'mcq'
+                  ? 'bg-forest text-white shadow-2xs'
+                  : 'bg-forest-pale text-forest-deep border border-forest-light hover:border-forest'
+              }`}
+            >
+              MCQ ({countMCQ})
+            </button>
+          </div>
+        </div>
+
         {/* Filter Dropdowns Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
           {/* Topic Filter */}
           <div className="flex items-center gap-1.5">
             <span className="text-sand-subtext font-semibold shrink-0">Topic:</span>
@@ -224,9 +342,23 @@ export default function QuestionsPage() {
               onChange={(e) => setSelectedType(e.target.value)}
               className="w-full px-2.5 py-1.5 rounded-lg bg-sand-surface border border-sand-border text-xs font-semibold text-sand-text focus:outline-hidden"
             >
-              <option value="all">All Formats (MCQ &amp; CQ)</option>
+              <option value="all">All Formats</option>
               <option value="MCQ">Multiple Choice (MCQ)</option>
               <option value="CQ">Creative / Numerical (CQ)</option>
+            </select>
+          </div>
+
+          {/* Language Version Filter */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-sand-subtext font-semibold shrink-0">Medium:</span>
+            <select
+              value={selectedLanguage}
+              onChange={(e) => setSelectedLanguage(e.target.value)}
+              className="w-full px-2.5 py-1.5 rounded-lg bg-sand-surface border border-sand-border text-xs font-semibold text-sand-text focus:outline-hidden"
+            >
+              <option value="all">All Mediums ({BOARD_QUESTIONS.length})</option>
+              <option value="EV">English Version ({countEV})</option>
+              <option value="BV">Bangla Version ({countBV})</option>
             </select>
           </div>
 
@@ -238,11 +370,11 @@ export default function QuestionsPage() {
               onChange={(e) => setSelectedDifficulty(e.target.value)}
               className="w-full px-2.5 py-1.5 rounded-lg bg-sand-surface border border-sand-border text-xs font-semibold text-sand-text focus:outline-hidden"
             >
-              <option value="all">All Difficulty Levels</option>
-              <option value="Easy">Easy (Recall &amp; Direct Formula)</option>
-              <option value="Medium">Medium (Standard Board Standard)</option>
-              <option value="Hard">Hard (Multi-Step &amp; Algebraic)</option>
-              <option value="Admission">Admission (Elite Challenge)</option>
+              <option value="all">All Levels</option>
+              <option value="Easy">Easy (Recall)</option>
+              <option value="Medium">Medium (Board Standard)</option>
+              <option value="Hard">Hard (Algebraic)</option>
+              <option value="Admission">Admission (Elite)</option>
             </select>
           </div>
         </div>
@@ -292,9 +424,54 @@ export default function QuestionsPage() {
                       {q.board} {q.year}
                     </span>
 
-                    <span className="px-2 py-0.5 rounded bg-sand-muted border border-sand-border font-semibold text-[11px] text-sand-text">
-                      {q.questionType === 'MCQ' ? 'MCQ (1 Mark)' : `Creative / Numerical (${q.marks} Marks)`}
-                    </span>
+                    {/* Canonical CQ Subpart Badge */}
+                    {(() => {
+                      const canonicalSubpart = q.cqSubpart || normalizeCQSubpart(q.questionType);
+                      const subpartMeta = canonicalSubpart ? CQ_SUBPARTS[canonicalSubpart] : null;
+
+                      if (subpartMeta) {
+                        return (
+                          <span
+                            className={`px-2.5 py-0.5 rounded-lg font-bold text-[11px] border flex items-center gap-1.5 ${subpartMeta.badgeBg} ${subpartMeta.badgeText} ${subpartMeta.badgeBorder}`}
+                          >
+                            <span className="w-4 h-4 rounded-full bg-current/15 text-center text-[10px] flex items-center justify-center font-black">
+                              {subpartMeta.labelBn}
+                            </span>
+                            <span>Part ({subpartMeta.labelEn})</span>
+                            <span>•</span>
+                            <span>{subpartMeta.standardMarks} Mark{subpartMeta.standardMarks > 1 ? 's' : ''}</span>
+                            <span className="hidden sm:inline font-semibold">({useBangla ? subpartMeta.titleBn : subpartMeta.titleEn})</span>
+                          </span>
+                        );
+                      }
+
+                      if (q.questionType === 'MCQ') {
+                        return (
+                          <span className="px-2.5 py-0.5 rounded-lg bg-forest-pale text-forest-deep border border-forest-light font-bold text-[11px]">
+                            MCQ • 1 Mark
+                          </span>
+                        );
+                      }
+
+                      return (
+                        <span className="px-2.5 py-0.5 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 font-bold text-[11px]">
+                          Admission • {q.marks} Marks
+                        </span>
+                      );
+                    })()}
+
+                    {/* Language Medium Badge */}
+                    {q.languageVersion && (
+                      <span
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${
+                          q.languageVersion === 'English Version'
+                            ? 'bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/40 dark:text-sky-300 dark:border-sky-800'
+                            : 'bg-sand-muted text-sand-text border-sand-border'
+                        }`}
+                      >
+                        {q.languageVersion === 'English Version' ? 'English Version (EV)' : 'Bangla Version (BV)'}
+                      </span>
+                    )}
 
                     <span
                       className={`text-[10px] font-bold px-2 py-0.5 rounded ${
@@ -309,23 +486,48 @@ export default function QuestionsPage() {
                     </span>
                   </div>
 
-                  <span
-                    className={`text-[11px] font-semibold flex items-center gap-1 ${
-                      isIshakReference
-                        ? 'text-orange-deep'
-                        : q.board === 'BUET Admission Test'
-                        ? 'text-maroon'
-                        : 'text-forest'
-                    }`}
-                  >
-                    {isIshakReference ? (
-                      <BookOpen size={13} className="text-orange" />
-                    ) : (
-                      <ShieldCheck size={13} />
+                  <div className="flex items-center gap-2 text-[11px]">
+                    <span
+                      className={`font-semibold flex items-center gap-1 ${
+                        isIshakReference
+                          ? 'text-orange-deep'
+                          : q.board === 'BUET Admission Test'
+                          ? 'text-maroon'
+                          : 'text-forest'
+                      }`}
+                    >
+                      {isIshakReference ? (
+                        <BookOpen size={13} className="text-orange" />
+                      ) : (
+                        <ShieldCheck size={13} />
+                      )}
+                      <span>{q.verificationStatus}</span>
+                    </span>
+
+                    {q.sourceUrl && (
+                      <a
+                        href={q.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sand-subtext hover:text-maroon flex items-center gap-0.5 font-medium ml-1"
+                        title="View official scan on board-questions.me"
+                      >
+                        <ExternalLink size={12} />
+                        <span className="hidden sm:inline">Source Scan</span>
+                      </a>
                     )}
-                    <span>{q.verificationStatus}</span>
-                  </span>
+                  </div>
                 </div>
+
+                {/* Parent CQ Stem if different from subpart question */}
+                {q.stemEn && q.stemEn !== q.questionEn && (
+                  <div className="p-3.5 rounded-xl bg-sand-muted/50 border border-sand-border/80 text-xs text-sand-text space-y-1">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-sand-subtext block">
+                      Creative Question Context (উদ্দীপক):
+                    </span>
+                    <p className="leading-relaxed">{useBangla ? q.stemBn || q.stemEn : q.stemEn}</p>
+                  </div>
+                )}
 
                 {/* Question Statement */}
                 <div className="space-y-1.5">
