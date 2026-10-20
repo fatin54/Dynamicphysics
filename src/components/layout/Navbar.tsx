@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import ThemeToggle from '@/components/theme/ThemeToggle';
 import {
   Compass,
   FlaskConical,
@@ -122,6 +123,7 @@ export default function Navbar() {
 
             {/* Right Action Buttons */}
             <div className="hidden sm:flex items-center gap-2">
+              <ThemeToggle variant="icon" />
               <Link
                 href="/progress"
                 className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-forest-pale border border-forest-light text-forest-deep text-xs font-bold hover:bg-forest hover:text-white transition-colors"
@@ -131,8 +133,9 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* Mobile Hamburger Toggle */}
+            {/* Mobile Header Actions: Theme Toggle + Menu */}
             <div className="lg:hidden flex items-center gap-2">
+              <ThemeToggle variant="icon" />
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="p-2.5 rounded-xl bg-sand-muted text-sand-text hover:text-orange border border-sand-border min-h-[44px] min-w-[44px] flex items-center justify-center"
@@ -199,6 +202,10 @@ export default function Navbar() {
                   </Link>
                 );
               })}
+            </div>
+
+            <div className="pt-2">
+              <ThemeToggle variant="expanded" />
             </div>
 
             <div className="pt-3 border-t border-sand-border flex justify-between items-center text-xs">

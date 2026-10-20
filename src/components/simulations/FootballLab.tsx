@@ -143,7 +143,7 @@ export default function FootballLab() {
         )}
 
         {/* Real-time calculated HUD */}
-        <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-md px-3 py-2 rounded-xl border border-sand-border shadow-sm text-xs space-y-1">
+        <div className="absolute top-3 left-3 bg-sand-surface/95 backdrop-blur-md px-3 py-2 rounded-xl border border-sand-border shadow-sm text-xs space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-sand-subtext">Impulse (J = F Δt):</span>
             <span className="font-mono font-bold text-orange-deep">{impulse.toFixed(2)} N·s</span>

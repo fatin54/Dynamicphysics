@@ -241,7 +241,7 @@ export default function AITutorChat() {
         {/* Bilingual View Toggle */}
         <button
           onClick={() => setPreferBangla(!preferBangla)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white border border-maroon-light text-maroon hover:bg-maroon hover:text-white transition-all shadow-2xs"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-sand-surface border border-maroon-light text-maroon hover:bg-maroon hover:text-white transition-all shadow-2xs"
         >
           <Languages size={13} />
           <span>{preferBangla ? 'English Mode' : 'বাংলায় দেখুন'}</span>

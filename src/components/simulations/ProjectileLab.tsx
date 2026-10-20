@@ -246,7 +246,7 @@ export default function ProjectileLab() {
         </svg>
 
         {/* Live HUD Dashboard */}
-        <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm p-3 rounded-xl border border-sand-border shadow-sm text-xs space-y-1">
+        <div className="absolute top-4 left-4 bg-sand-surface/95 backdrop-blur-sm p-3 rounded-xl border border-sand-border shadow-sm text-xs space-y-1">
           <div className="flex items-center gap-3">
             <span className="text-sand-subtext">Flight Time (T):</span>
             <span className="font-mono font-bold text-maroon-deep">{flightTime.toFixed(2)} s</span>

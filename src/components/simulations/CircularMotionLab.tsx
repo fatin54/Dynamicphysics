@@ -174,7 +174,7 @@ export default function CircularMotionLab() {
         </svg>
 
         {/* Live HUD Box */}
-        <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm p-3 rounded-xl border border-sand-border shadow-sm text-xs space-y-1">
+        <div className="absolute top-3 left-3 bg-sand-surface/95 backdrop-blur-sm p-3 rounded-xl border border-sand-border shadow-sm text-xs space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-sand-subtext">Angular Speed (ω):</span>
             <span className="font-mono font-bold text-orange-deep">{omega.toFixed(2)} rad/s</span>

@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,33 +11,33 @@ const config: Config = {
     extend: {
       colors: {
         orange: {
-          deep: "#A63D12",
+          deep: "rgb(var(--orange-deep) / <alpha-value>)",
           DEFAULT: "#E87524",
           bright: "#F7943D",
-          light: "#FFD0A6",
-          pale: "#FFF0E3",
+          light: "rgb(var(--orange-light) / <alpha-value>)",
+          pale: "rgb(var(--orange-pale) / <alpha-value>)",
         },
         maroon: {
-          deep: "#4A1025",
+          deep: "rgb(var(--maroon-deep) / <alpha-value>)",
           DEFAULT: "#781F3A",
           rich: "#9B304B",
-          light: "#C77A8D",
-          pale: "#F4E4E9",
+          light: "rgb(var(--maroon-light) / <alpha-value>)",
+          pale: "rgb(var(--maroon-pale) / <alpha-value>)",
         },
         forest: {
-          deep: "#153D2B",
+          deep: "rgb(var(--forest-deep) / <alpha-value>)",
           DEFAULT: "#26734D",
           fresh: "#3D9664",
-          light: "#9AC9A7",
-          pale: "#E6F3E8",
+          light: "rgb(var(--forest-light) / <alpha-value>)",
+          pale: "rgb(var(--forest-pale) / <alpha-value>)",
         },
         sand: {
-          bg: "#FAF8F5",
-          surface: "#FFFFFF",
-          muted: "#F2EEE8",
-          text: "#241E20",
-          subtext: "#6E6466",
-          border: "#E5DDD8",
+          bg: "rgb(var(--sand-bg) / <alpha-value>)",
+          surface: "rgb(var(--sand-surface) / <alpha-value>)",
+          muted: "rgb(var(--sand-muted) / <alpha-value>)",
+          text: "rgb(var(--sand-text) / <alpha-value>)",
+          subtext: "rgb(var(--sand-subtext) / <alpha-value>)",
+          border: "rgb(var(--sand-border) / <alpha-value>)",
         },
       },
       fontFamily: {

@@ -281,7 +281,7 @@ export default function NewtonLab() {
         )}
 
         {/* Live HUD Dashboard */}
-        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-xl border border-sand-border shadow-sm text-xs space-y-1">
+        <div className="absolute top-3 left-3 bg-sand-surface/90 backdrop-blur-sm px-3 py-2 rounded-xl border border-sand-border shadow-sm text-xs space-y-1">
           <div className="flex items-center gap-3">
             <span className="text-sand-subtext">Elapsed Time:</span>
             <span className="font-mono font-bold text-maroon-deep">{time.toFixed(2)} s</span>

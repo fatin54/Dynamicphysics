@@ -623,4 +623,52 @@ console.log('\n--- 12. Testing Canonical CQ Subpart Utilities & Dataset Integrit
   console.log('✓ Canonical CQ Subparts & Historical Import Integrity tests passed.');
 }
 
+// -------------------------------------------------------------
+// 13. Dark Mode Theme Architecture & Asset Integrity
+// -------------------------------------------------------------
+console.log('\n--- 13. Testing Dark Mode Theme Architecture & Asset Integrity ---');
+
+{
+  // 13.1 Tailwind darkMode class configuration
+  const tailwindConfig = fs.readFileSync('tailwind.config.ts', 'utf-8');
+  assert.ok(
+    tailwindConfig.includes('darkMode: "class"') || tailwindConfig.includes("darkMode: 'class'"),
+    'tailwind.config.ts must enable class-based dark mode (darkMode: "class")'
+  );
+
+  // 13.2 Globals CSS color tokens for root and dark mode
+  const globalsCss = fs.readFileSync('src/app/globals.css', 'utf-8');
+  assert.ok(globalsCss.includes('--sand-bg:'), 'globals.css defines --sand-bg in :root');
+  assert.ok(globalsCss.includes('--sand-surface:'), 'globals.css defines --sand-surface in :root');
+  assert.ok(globalsCss.includes('.dark {'), 'globals.css defines .dark class');
+  assert.ok(globalsCss.includes('--sand-bg: 18 20 23;'), 'globals.css defines dark charcoal background');
+  assert.ok(globalsCss.includes('--sand-surface: 24 27 32;'), 'globals.css defines dark card surface');
+  assert.ok(globalsCss.includes('--sand-text: 245 245 240;'), 'globals.css defines crisp light text');
+
+  // 13.3 Root Layout Anti-FOUC script and ThemeProvider
+  const layoutTsx = fs.readFileSync('src/app/layout.tsx', 'utf-8');
+  assert.ok(layoutTsx.includes('suppressHydrationWarning'), 'layout.tsx has suppressHydrationWarning');
+  assert.ok(layoutTsx.includes('ThemeProvider'), 'layout.tsx wraps app in ThemeProvider');
+  assert.ok(layoutTsx.includes('dynamicphysics-theme'), 'layout.tsx checks localStorage for dynamicphysics-theme');
+  assert.ok(layoutTsx.includes('prefers-color-scheme: dark'), 'layout.tsx checks OS prefers-color-scheme in head script');
+
+  // 13.4 ThemeProvider and ThemeToggle components
+  const themeProviderTsx = fs.readFileSync('src/components/theme/ThemeProvider.tsx', 'utf-8');
+  assert.ok(themeProviderTsx.includes('ThemeContext'), 'ThemeProvider creates ThemeContext');
+  assert.ok(themeProviderTsx.includes('toggleTheme'), 'ThemeProvider provides toggleTheme function');
+
+  const themeToggleTsx = fs.readFileSync('src/components/theme/ThemeToggle.tsx', 'utf-8');
+  assert.ok(themeToggleTsx.includes('aria-label='), 'ThemeToggle includes accessible aria-label');
+  assert.ok(themeToggleTsx.includes('Moon'), 'ThemeToggle includes Moon icon');
+  assert.ok(themeToggleTsx.includes('Sun'), 'ThemeToggle includes Sun icon');
+
+  // 13.5 Navbar includes ThemeToggle
+  const navbarTsx = fs.readFileSync('src/components/layout/Navbar.tsx', 'utf-8');
+  assert.ok(navbarTsx.includes('ThemeToggle'), 'Navbar imports and renders ThemeToggle');
+  assert.ok(navbarTsx.includes('<ThemeToggle variant="icon" />'), 'Navbar renders icon toggle');
+  assert.ok(navbarTsx.includes('<ThemeToggle variant="expanded" />'), 'Navbar renders expanded toggle in mobile drawer');
+
+  console.log('✓ Dark Mode Theme Architecture & Asset Integrity tests passed.');
+}
+
 console.log('\n🎉 ALL MATHEMATICAL PHYSICS UNIT TESTS PASSED SUCCESSFULLY! 🌟\n');

@@ -107,11 +107,11 @@ export default function FallingBodyLab() {
       {/* Visual Vacuum Chamber */}
       <div className="relative bg-sand-bg rounded-xl border border-sand-border h-72 overflow-hidden mb-5 flex justify-center items-center">
         {/* The Glass Tube */}
-        <div className="relative w-72 h-64 bg-white/70 border-2 border-sand-border rounded-3xl shadow-inner flex justify-around p-3">
+        <div className="relative w-72 h-64 bg-sand-surface/70 border-2 border-sand-border rounded-3xl shadow-inner flex justify-around p-3">
           {/* Air particles indicator */}
           {!isVacuum && (
-            <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
-              backgroundImage: 'radial-gradient(#241E20 1px, transparent 1px)',
+            <div className="absolute inset-0 opacity-20 pointer-events-none text-sand-text" style={{
+              backgroundImage: 'radial-gradient(currentColor 1px, transparent 1px)',
               backgroundSize: '12px 12px',
             }} />
           )}
@@ -144,7 +144,7 @@ export default function FallingBodyLab() {
         </div>
 
         {/* Live HUD Box */}
-        <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm p-3 rounded-xl border border-sand-border shadow-sm text-xs space-y-1">
+        <div className="absolute top-4 left-4 bg-sand-surface/95 backdrop-blur-sm p-3 rounded-xl border border-sand-border shadow-sm text-xs space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-sand-subtext">Chamber State:</span>
             <span className="font-bold text-maroon-deep">{isVacuum ? 'Vacuum (0.00 atm)' : 'Air (1.00 atm)'}</span>

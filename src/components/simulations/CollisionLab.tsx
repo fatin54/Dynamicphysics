@@ -176,7 +176,7 @@ export default function CollisionLab() {
         </div>
 
         {/* Live HUD */}
-        <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-2 rounded-xl border border-sand-border shadow-sm text-xs space-y-1">
+        <div className="absolute top-3 left-3 bg-sand-surface/95 backdrop-blur-sm px-3 py-2 rounded-xl border border-sand-border shadow-sm text-xs space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-sand-subtext">Total Momentum (P):</span>
             <span className="font-mono font-bold text-maroon-deep">{pInitial.toFixed(1)} kg·m/s</span>

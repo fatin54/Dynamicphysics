@@ -75,7 +75,7 @@ export default function GlossaryPage() {
 
           <button
             onClick={() => setShowBanglaDef(!showBanglaDef)}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold bg-white border border-sand-border text-maroon-deep hover:bg-sand-muted transition-colors shadow-2xs"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold bg-sand-surface border border-sand-border text-maroon-deep hover:bg-sand-muted transition-colors shadow-2xs"
           >
             <Languages size={14} />
             <span>{showBanglaDef ? 'Showing Bangla Definitions' : 'English Only'}</span>

@@ -66,7 +66,7 @@ export default function GuidedCQSolver() {
                 }`}
               >
                 <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="px-2 py-0.5 rounded bg-white text-maroon font-bold text-[10px] border border-maroon-light">
+                  <span className="px-2 py-0.5 rounded bg-sand-surface text-maroon font-bold text-[10px] border border-maroon-light">
                     {cq.board} Board {cq.year}
                   </span>
                   <span className="text-[11px] text-sand-subtext">{cq.scenarioType}</span>
@@ -194,7 +194,7 @@ export default function GuidedCQSolver() {
               <span className="font-bold text-forest-deep uppercase tracking-wider block mb-1">
                 Official Model Answer:
               </span>
-              <p className="text-forest-deep leading-relaxed bg-white p-3.5 rounded-lg border border-forest-light font-medium">
+              <p className="text-forest-deep leading-relaxed bg-sand-surface p-3.5 rounded-lg border border-forest-light font-medium">
                 {useBangla ? activePart.modelAnswerBn : activePart.modelAnswerEn}
               </p>
             </div>
@@ -209,7 +209,7 @@ export default function GuidedCQSolver() {
                 {activePart.markingCriteria.map((crit, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-between p-2 rounded-lg bg-white border border-forest-light text-sand-text"
+                    className="flex items-center justify-between p-2 rounded-lg bg-sand-surface border border-forest-light text-sand-text"
                   >
                     <span>{crit.condition}</span>
                     <span className="font-bold text-forest ml-3 shrink-0">

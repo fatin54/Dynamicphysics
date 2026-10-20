@@ -621,7 +621,7 @@ export default function QuestionsPage() {
                       </span>
                     </div>
 
-                    <div className="space-y-1.5 font-mono text-xs text-sand-text bg-white p-3.5 rounded-lg border border-forest-light">
+                    <div className="space-y-1.5 font-mono text-xs text-sand-text bg-sand-surface p-3.5 rounded-lg border border-forest-light">
                       {(useBangla ? q.solutionStepsBn : q.solutionStepsEn).map((step, idx) => (
                         <div key={idx} className="flex gap-2 leading-relaxed">
                           <span className="text-sand-subtext select-none">{idx + 1}.</span>
